@@ -4,7 +4,16 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <property name="context-root" value="permission-web"/>
+        <dependent-module archiveName="wang-core-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/wang-core/wang-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="service-service-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/service-service/service-service">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="service-imp-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/service-imp/service-imp">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/permission-web/target/classes"/>
+        <property name="context-root" value="ROOT"/>
     </wb-module>
 </project-modules>
