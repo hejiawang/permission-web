@@ -31,7 +31,7 @@ public class HornetQInterceptor extends HandlerInterceptorAdapter {
 
     	try {
             HttpSession session = request.getSession();
-            UserEntity user = (UserEntity) session.getAttribute("userInfo");
+            UserEntity user = (UserEntity) session.getAttribute("userEntity");
             
             // 向HornetQ发送用户动作，排除掉资源文件的访问
             String url = request.getRequestURL().toString();			// 访问的URL
@@ -42,7 +42,7 @@ public class HornetQInterceptor extends HandlerInterceptorAdapter {
                 String loginName = "visitors"; 							// 登陆人，默认非登陆用户统一为访客
                 String remoteIP = ClientIPUtils.getClientIp(request);   // 方位者的IP地址
                 
-            	if(user.getLoginName() != null && user.getLoginName() != "") {
+            	if(user != null && user.getLoginName() != null && user.getLoginName() != "") {
             		loginName = user.getLoginName();
             	}
             	Date date = new Date();

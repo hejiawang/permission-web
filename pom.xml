@@ -290,6 +290,7 @@
 	            <pom.js.baseurl.domain>http://localhost:7998/resources/js</pom.js.baseurl.domain>
 	            <pom.img.baseurl.domain>http://localhost:7998/resources/images</pom.img.baseurl.domain>
 	            <pom.css.baseurl.domain>http://localhost:7998/resources/css</pom.css.baseurl.domain>
+	            <pom.cookie.domain>permission.dev</pom.cookie.domain>
 	            
 	            <pom.hornetq.send.host>localhost</pom.hornetq.send.host>
 				<pom.hornetq.send.port>5445</pom.hornetq.send.port>

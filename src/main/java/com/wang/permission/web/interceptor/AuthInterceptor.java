@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.wang.core.util.DomainUrlUtil;
+import com.wang.permission.web.util.SessionUtil;
 import com.wang.service.entity.user.UserEntity;
 
 /**
@@ -35,12 +36,13 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		
 		try {
 			
+			SessionUtil.getOrCreateSessionId(request, response);
+			
 			if (ANONYMOUS_URLS.contains(request.getRequestURI())) {
 				return true;
 			}
 
-			HttpSession session = request.getSession();
-			UserEntity user = (UserEntity)session.getAttribute("userInfo");
+			UserEntity user = SessionUtil.getFrontUserByRequest(request);
 			if( null == user ){
 				response.sendRedirect(DomainUrlUtil.BASEURL_DOMAIN + "/login");
 				return false;

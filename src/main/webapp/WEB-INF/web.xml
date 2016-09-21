@@ -60,6 +60,15 @@
 		<servlet-name>permission-servlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>validateImage</servlet-name>
+		<servlet-class>com.wang.core.util.IdentifyingCode</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>validateImage</servlet-name>
+		<url-pattern>/validateImage.image</url-pattern>
+	</servlet-mapping>
 	
 	<error-page>
 		<error-code>404</error-code>

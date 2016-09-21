@@ -68,6 +68,7 @@
 		<property name="JS_BASEURL_DOMAIN" value="${pom.js.baseurl.domain}" />
 		<property name="CSS_BASEURL_DOMAIN" value="${pom.css.baseurl.domain}" />
 		<property name="IMG_BASEURL_DOMAIN" value="${pom.img.baseurl.domain}" /> 
+		<property name="COOKIE_DOMAIN" value="${pom.cookie.domain}" /> 
 	</bean>
 	
 	<!-- 注入HornetQ连接参数 -->
