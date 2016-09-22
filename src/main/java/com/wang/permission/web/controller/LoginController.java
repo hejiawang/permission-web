@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wang.core.ServiceResult;
 import com.wang.core.util.RegExpValidator;
+import com.wang.permission.web.util.SessionUtil;
 import com.wang.service.entity.user.UserEntity;
 import com.wang.service.service.user.LoginService;
 
@@ -94,8 +95,7 @@ public class LoginController extends BaseController {
 			}
 			
 			//把用户信息加载到session中
-			session.setAttribute("userEntity", user);
-			
+			SessionUtil.writeUserToSession(request, user);
 			//加载用户权限
 			//loadStationInfoToFrontUser(request, frontUser);
 			//记录登录日志

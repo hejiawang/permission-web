@@ -86,7 +86,7 @@ public class SessionUtil {
 
 		try {
 			String sessionId = getSessionId(request);
-			String key = WebConstants.NAMESPACE_GODAJI_WEB_MEMBER_SESSION + sessionId;
+			String key = WebConstants.NAMESPACE_PERMISSION_WEB_SESSION + sessionId;
 			HttpSession session = request.getSession();
 			UserEntity frontUser = (UserEntity)session.getAttribute(key);
 			if (frontUser == null)
@@ -99,6 +99,28 @@ public class SessionUtil {
 			logger.error("获取从session中UserEntity异常", e);
 			return new UserEntity();
 		}
+	}
+	
+	/**
+	 * 缓存用户信息至session
+	 */
+	public static UserEntity writeUserToSession(HttpServletRequest request, UserEntity user) {
+
+		try {
+			if (request == null || user == null) {
+				return new UserEntity();
+			}
+			String sessionId = getSessionId(request);
+			if (user == null || sessionId == null) {
+				return new UserEntity();
+			}
+			final String key = WebConstants.NAMESPACE_PERMISSION_WEB_SESSION + sessionId;
+			HttpSession session = request.getSession();
+			session.setAttribute(key, user);
+		} catch (Exception e) {
+			logger.error("用户信息写入session中异常", e);
+		}
+		return user;
 	}
 
 	

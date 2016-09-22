@@ -280,11 +280,11 @@
 				
 				<pom.jdbc.shop.read.url>jdbc:mysql://localhost:3306/test?characterEncoding=utf8</pom.jdbc.shop.read.url>
 				<pom.jdbc.shop.read.username>root</pom.jdbc.shop.read.username>
-				<pom.jdbc.shop.read.password>root</pom.jdbc.shop.read.password>
+				<pom.jdbc.shop.read.password>123456</pom.jdbc.shop.read.password>
 
 				<pom.jdbc.shop.write.url>jdbc:mysql://localhost:3306/test?characterEncoding=utf8</pom.jdbc.shop.write.url>
 				<pom.jdbc.shop.write.username>root</pom.jdbc.shop.write.username>
-				<pom.jdbc.shop.write.password>root</pom.jdbc.shop.write.password>
+				<pom.jdbc.shop.write.password>123456</pom.jdbc.shop.write.password>
 
 	            <pom.baseurl.domain>http://localhost:7998</pom.baseurl.domain>
 	            <pom.js.baseurl.domain>http://localhost:7998/resources/js</pom.js.baseurl.domain>

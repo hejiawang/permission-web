@@ -14,6 +14,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.wang.core.bean.BehaviorBean;
 import com.wang.core.util.ClientIPUtils;
+import com.wang.permission.web.util.SessionUtil;
 import com.wang.service.entity.user.UserEntity;
 
 /**
@@ -30,8 +31,7 @@ public class HornetQInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
     	try {
-            HttpSession session = request.getSession();
-            UserEntity user = (UserEntity) session.getAttribute("userEntity");
+            UserEntity user = SessionUtil.getFrontUserByRequest(request);
             
             // 向HornetQ发送用户动作，排除掉资源文件的访问
             String url = request.getRequestURL().toString();			// 访问的URL

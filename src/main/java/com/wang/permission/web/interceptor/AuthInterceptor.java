@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +28,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 	static {
 		ANONYMOUS_URLS.add("/login");
+		ANONYMOUS_URLS.add("/error.html");
 	}
 
 	@Override
@@ -44,6 +44,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 			UserEntity user = SessionUtil.getFrontUserByRequest(request);
 			if( null == user ){
+				response.sendRedirect(DomainUrlUtil.BASEURL_DOMAIN + "/login");
+				return false;
+			} else if ( user.getID() == null ) {
 				response.sendRedirect(DomainUrlUtil.BASEURL_DOMAIN + "/login");
 				return false;
 			}

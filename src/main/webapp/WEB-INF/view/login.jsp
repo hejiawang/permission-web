@@ -191,7 +191,7 @@
 		   var loginName=$("#loginName").val();
 		   var passWord=$("#passWord").val();
 		   var validateImage=$("#validateImage").val();
-		   var url="<%=basePath%>/login";
+		   var url="<%=basePath%>login";
 		   $.post(url,{loginName:loginName,password:passWord,validateImage:validateImage},function(data){
 				if(data.state=="ok"){
 					$("#error-info").text("");
