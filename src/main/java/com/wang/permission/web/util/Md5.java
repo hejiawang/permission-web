@@ -347,8 +347,4 @@ public class Md5 {
 		return digestedCookie;
 	}
 
-	public static void main(String args[]) throws IOException {
-		String a = Md5.getMd5String("jinzhu800311") + "9342";
-		System.out.println("密码：" + Md5.getMd5String(a));
-	}
 }

@@ -196,7 +196,7 @@
 				if(data.state=="ok"){
 					$("#error-info").text("");
 					$("#error-info").hide();
-					window.location.href='https://www.baidu.com';
+					window.location.href='<%=basePath%>index';
 				}else if(data.state=="error"){
 					$("#error-info").text(data.info);
 					$("#error-info").show();

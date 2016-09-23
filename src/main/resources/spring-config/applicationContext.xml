@@ -4,15 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
        default-lazy-init="true">
 
-	<bean class="com.wang.core.util.ApplicationPropertyConfigurer" scope="singleton">
-		<property name="location" value="classpath:config/application.properties" />
-	</bean>
-	
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:config/conf.properties" />
-	</bean>
-
 	<!-- 跨站请求伪造 Cross-site request forgery -->
 	<bean name="requestDataValueProcessor"
 	      class="com.wang.permission.web.csrf.CSRFRequestDataValueProcessor" />
@@ -20,6 +11,15 @@
 	<!-- 跨站脚本 Cross-site scripting  -->
 	<bean class="com.wang.permission.web.xss.XssPropertyConfigurer" scope="singleton">
 		<property name="location" value="classpath:xss/xss.properties" />
+	</bean>
+	
+	<bean class="com.wang.core.util.ApplicationPropertyConfigurer" scope="singleton">
+		<property name="location" value="classpath:config/application.properties" />
+	</bean>
+	
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:config/conf.properties" />
 	</bean>
 
 	<import resource="classpath*:service-imp/service-config.xml" />
