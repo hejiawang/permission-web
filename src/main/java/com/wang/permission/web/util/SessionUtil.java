@@ -32,7 +32,7 @@ public class SessionUtil {
 			CookieHelper.addCookie(
 					COOKIE_SESSION_ID,
 					sessionId,
-					DomainUrlUtil.COOKIE_DOMAIN,
+//					/DomainUrlUtil.COOKIE_DOMAIN,
 					"/",
 					-1, //session有效时间为关闭浏览器失效
 					response
