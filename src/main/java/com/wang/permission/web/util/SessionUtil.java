@@ -11,10 +11,13 @@ import org.slf4j.LoggerFactory;
 
 import com.wang.core.util.ClientIPUtils;
 import com.wang.core.util.CookieHelper;
-import com.wang.core.util.DomainUrlUtil;
 import com.wang.core.util.SaltUtil;
 import com.wang.service.entity.user.UserEntity;
 
+/**
+ * session工具类
+ * @author HeJiawang
+ */
 public class SessionUtil {
 	
 	private static final Logger logger = LoggerFactory.getLogger(SessionUtil.class);
@@ -122,6 +125,22 @@ public class SessionUtil {
 		}
 		return user;
 	}
-
+	
+	/**
+	 * 删除session
+	 * @author HeJiawang
+	 * @date   2016.10.09
+	 */
+	public static void deleteUserFromSession(HttpServletRequest request){
+		try {
+			String sessionId = getSessionId(request);
+			final String key = WebConstants.NAMESPACE_PERMISSION_WEB_SESSION + sessionId;
+			HttpSession session = request.getSession();
+			session.removeAttribute(key);
+			session.invalidate();
+		} catch (Exception e) {
+			logger.error("用户信息写入session中异常", e);
+		}
+	}
 	
 }

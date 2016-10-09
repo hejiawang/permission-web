@@ -4,63 +4,46 @@
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
-<html lang="zh" style="background-color: #F2F2F2 !important;">
+<html lang="zh">
 <head>
 	<base href="<%=basePath%>">
-	<title>权限管理系统</title>
+ 	<title>权限管理系统</title>
 	<meta name="keywords" content="权限管理" />
   	<meta name="description" content="权限管理" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<%@include file="resource/resource.jsp"%>
-	
 	<style type="text/css">
-	
              .dataTables_length {
-                  width: 150px !important;
+                  width: 160px !important;
+                  height: 25px;
                   float: right;
-                  margin-top:3px;                 
+                  margin-top:13px;                 
              }
-             .tree-btn{
-                   position: relative;
-                   width: auto;
-                   height: auto;
-                   float: left;
+             
+             .dataTables_length label{
+                  height: 25px;
+                  text-align: left;
+             }              
+             .dataTables_info{
+                  position: relative;
+                  float: left;
+                  top: 13px;
              }
-             .tree-btn-width2{
-                   width: 80%;
-                   margin-left: 15px;
-             }               
-             @media (max-width:375px){
-                #row-btn{
-                    position: relative;
-                    margin-top: 30px;
-                    margin-right: 0;
-                    margin-left: 8%;
-                }
-                .hr-12, .hr12{
-                    margin-left: -40px;
-                }
-                .content_wrap{
-                   position: relative;
-                   width: 100%;
-                   height: auto;
-                }
-                .tree-btn{
-                   position: relative;
-                   width: 100%;
-                   height: auto;
-                   float: none;
-                   margin-left: 8%;
-                }                            
+            .dataTables_paginate .pagination{
+                 position:relative;
+                 float: right;
+                 right: 20px;
+                 top:10px; 
              }
-             .clearfix input[type=text]{
+             .clearfix input[type=text],input[type=email],input[type=password]{
                  width: 75% !important;
              }			    
              .clearfix textarea{
                  width: 75% !important;
-             }			    
-	</style>
+             } 		
+	</style>	
+	<script type="text/javascript">
+		
+	</script>	
 </head>
 
 <body class="no-skin">
@@ -72,7 +55,7 @@
 			try{ace.settings.check('main-container' , 'fixed');}catch(e){}
 		</script>
 
-		<div id="sidebar" class="sidebar responsive">
+		<div id="sidebar" class="sidebar                  responsive">
 			<script type="text/javascript">
 				try{ace.settings.check('sidebar' , 'fixed');}catch(e){}
 			</script>
@@ -97,10 +80,9 @@
 				<ul class="breadcrumb">
 					<li>
 						<i class="ace-icon fa fa-home home-icon"></i>
-						<a href="main/index.jsp">我的工作台</a>
+						<a href="index">我的工作台</a>
 					</li>
-					<li>系统管理</li>
-					<li class="active">机构管理</li>
+					<li class="active">权限管理</li>
 				</ul><!-- /.breadcrumb -->
 
 				<!-- search start -->
@@ -108,20 +90,25 @@
 				<!-- search end -->
 			</div>
 
-			<div class="page-content col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
-
-			</div><!-- /.col -->
-			</div><!-- /.row -->
-			
-			<%@include file="resource/footer.jsp"%>
-            <!-- footer end -->
-            <!-- upper start -->
-            <%@include file="resource/upper.jsp"%>
-            <!-- upper end -->
+			<div class="page-content">
+                <div class="row">
+					<div class="col-xs-12">
+									  
+					</div>
+					<!-- PAGE CONTENT ENDS -->
+				</div><!-- /.col -->
+				<%@include file="resource/footer.jsp"%>
+	            <!-- footer end -->
+	            <!-- upper start -->
+	            <%@include file="resource/upper.jsp"%>
+	            <!-- upper end -->							
+			</div><!-- /.row -->						
 		</div><!-- /.page-content-area -->
-	<!-- inline scripts related to this page -->
+	</div>
+<!-- inline scripts related to this page -->
 <script type="text/javascript">
-	
+jQuery.ajaxSetup({cache:false});
 </script>
 </body>
 </html>
+

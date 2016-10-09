@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wang.core.ServiceResult;
+import com.wang.core.util.DomainUrlUtil;
 import com.wang.core.util.RegExpValidator;
 import com.wang.permission.web.util.SessionUtil;
 import com.wang.service.entity.user.UserEntity;
@@ -113,6 +114,22 @@ public class LoginController extends BaseController {
 			map.put("message", "验证码错误");
 			return map;
 		}
+	}
+	
+	/**
+	 * 退出系统
+	 * @author HeJiawang
+	 * @date   2016.10.09
+	 */
+	@RequestMapping(value = "/logout", method = {RequestMethod.GET})
+	public String logout( HttpServletRequest request, HttpServletResponse response, Model model ){
+		try {
+			SessionUtil.deleteUserFromSession(request);
+		} catch (Exception e) {
+			logger.error("退出出错", e);
+		}
+		
+		return "redirect:" + DomainUrlUtil.BASEURL_DOMAIN;
 	}
 	
 	/**

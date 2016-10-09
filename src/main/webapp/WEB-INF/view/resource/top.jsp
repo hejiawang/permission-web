@@ -29,6 +29,31 @@
 		</div>
 
 		<div class="navbar-buttons navbar-header pull-right" role="navigation">
+			<ul class="nav ace-nav">
+				<li class="light-blue">
+					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+						<img class="nav-user-photo" src="${domainUrlUtil.BASEURL_DOMAIN}/resources/avatars/user.jpg" alt="Jason's Photo" />
+						<span class="user-info" style="font-family: 微软雅黑">
+							<small>欢迎您,</small>
+							<!--%=session.getAttribute("userName") %-->
+							<small id="user_user_name">sdf</small>
+						</span>
+	
+						<i class="ace-icon fa fa-caret-down"></i>
+					</a>
+	
+					<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-menus dropdown-yellow dropdown-caret dropdown-close" style="width:126px;">
+						<li class="divider"></li>
+	
+						<li>
+							<a href="${domainUrlUtil.BASEURL_DOMAIN}/logout">
+								<i class="ace-icon fa fa-power-off"></i>
+								退出
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul> 
 		</div>
 	</div><!-- /.navbar-container -->
 </div>

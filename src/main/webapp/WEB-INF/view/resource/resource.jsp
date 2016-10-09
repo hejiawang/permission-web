@@ -36,7 +36,7 @@
 		<link rel="stylesheet" href="<%= basePath1%>resources/css/openSans.css" />
 
 		<!-- ace styles -->
-		<link rel="stylesheet" href="<%= basePath1%>gresources/css/ace.css" id="main-ace-style" />
+		<link rel="stylesheet" href="<%= basePath1%>resources/css/ace.css" id="main-ace-style" />
 
 		<!--[if lte IE 9]>
 			<link rel="stylesheet" href="resources/css/ace-part2.css" />
