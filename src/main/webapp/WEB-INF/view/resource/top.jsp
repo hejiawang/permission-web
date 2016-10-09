@@ -57,3 +57,21 @@
 		</div>
 	</div><!-- /.navbar-container -->
 </div>
+
+<script type="text/javascript">
+	var permission = permission || {};
+	permission.domainUrl = {
+		baseDomain : '${domainUrlUtil.BASEURL_DOMAIN}',
+		imageDomain : '${domainUrlUtil.IMG_BASEURL_DOMAIN}',
+	}
+	
+	// 百度统计
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?37568d1c8b87eb60d31b26689fe56604";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	
+</script>
