@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page import="com.wang.core.util.DomainUrlUtil"%>
 <%
     String systemPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 %>
@@ -32,7 +33,7 @@
 			<ul class="nav ace-nav">
 				<li class="light-blue">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-						<img class="nav-user-photo" src="${domainUrlUtil.BASEURL_DOMAIN}/resources/avatars/user.jpg" alt="Jason's Photo" />
+						<img class="nav-user-photo" src="resources/avatars/user.jpg" alt="Jason's Photo" />
 						<span class="user-info" style="font-family: 微软雅黑">
 							<small>欢迎您,</small>
 							<!--%=session.getAttribute("userName") %-->
@@ -46,7 +47,7 @@
 						<li class="divider"></li>
 	
 						<li>
-							<a href="${domainUrlUtil.BASEURL_DOMAIN}/logout">
+							<a href="logout">
 								<i class="ace-icon fa fa-power-off"></i>
 								退出
 							</a>
@@ -61,8 +62,8 @@
 <script type="text/javascript">
 	var permission = permission || {};
 	permission.domainUrl = {
-		baseDomain : '${domainUrlUtil.BASEURL_DOMAIN}',
-		imageDomain : '${domainUrlUtil.IMG_BASEURL_DOMAIN}',
+		baseDomain : '<%=DomainUrlUtil.BASEURL_DOMAIN%>',
+		imageDomain : '<%=DomainUrlUtil.IMG_BASEURL_DOMAIN%>',
 	}
 	
 	// 百度统计

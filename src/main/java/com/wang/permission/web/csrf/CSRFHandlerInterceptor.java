@@ -28,6 +28,7 @@ public class CSRFHandlerInterceptor extends HandlerInterceptorAdapter {
 	static {
 		DIRECT_URLS.add("/login.html");
 		DIRECT_URLS.add("/login");
+		DIRECT_URLS.add("/error.html");
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public class CSRFHandlerInterceptor extends HandlerInterceptorAdapter {
 
 			if (StringUtils.isEmpty(memKey)) {
 				//response.sendError(HttpServletResponse.SC_FORBIDDEN, "Bad or missing CSRF value");
-				throw new BusinessException("请使用正常方式提交，不要进行重复提交操作!");
+				throw new BusinessException("请使用正常方式提交，不要进行重复提交操作!" + request.getRequestURI());
 				//return false;
 			}
 			String memToken = CSRFTokenManager.getTokenForSession(session, memKey);
