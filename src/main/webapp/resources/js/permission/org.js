@@ -2,6 +2,9 @@ var permission = permission || {};
 
 /**
  * 机构js
+ * 
+ * @author HeJiawang
+ * @date   2016.10.10
  */
 permission.org = {
 	
@@ -16,8 +19,20 @@ permission.org = {
 	 * 常量
 	 */
 	common	:	{
+		/**
+		 * 机构url
+		 */
 		myurl	:	permission.domainUrl.baseDomain + '/org',
+		
+		/**
+		 * 机构列表选中项
+		 */
 		tableRowDateObj	: Object,
+		
+		/**
+		 * 机构节点
+		 */
+		nodeId	: 1001,
 	},
 		
 	/**
@@ -25,9 +40,8 @@ permission.org = {
 	 */
 	init	:	function(){
 		var _that = this;
-		jQuery.ajaxSetup({cache:false});
+		//jQuery.ajaxSetup({cache:false});
 		
-		_that.bindEvent();
 		_that.initTable();
 	},
 	
@@ -148,9 +162,98 @@ permission.org = {
 	},
 	
 	/**
-	 * 为按钮绑定事件
+	 * 判断是否选中组织列表数据
 	 */
-	bindEvent	:	function(){
+	goCheck	:	function(){
+		 var ids = document.getElementsByName("selectOrgID");
+   		 var count = 0;
+   		 var id =0;
+   		 for (var i=0;i<ids.length;i++ ){
+   		     if(ids[i].checked){ //判断复选框是否选中
+   		     	count=count+1;
+   		     }
+   		 }
+   		 if(count==0){
+   			 alert("请选择要操作的行！");
+   			 return id;
+   		 }else if(count>1){
+   			 alert("只能操作一行数据！");
+   			 return id;
+   		 }else if(count==1){
+   			for (var i=0;i<ids.length;i++ ){
+      		     if(ids[i].checked){ 
+  		            id=ids[i].value;
+      		     }
+      		 }
+   			return id;
+   		 }
+	},
+	
+	/**
+	 * 重置检索框
+	 */
+	goReset	:	function(){
+		var _that = this;
+		
+		var table = $('#example').DataTable();
+		$("#orgCodeSerch").val("");
+		$("#orgNameSerch").val("");
+		table.ajax.url( _that.common.myurl+"/page?orgID=" + _that.common.nodeId).load();
+	},
+	
+	/**
+	 * 检索
+	 */
+	goSearch	:	function(){
+		var _that = this;
+		
+		var table = $('#example').DataTable();
+		var orgCode = $("#orgCodeSerch").val();
+		var orgName = $("#orgNameSerch").val();
+		table.ajax.url( _that.common.myurl+"/page?orgID=" + _that.common.nodeId + "&orgCode=" + orgCode + "&orgName=" + orgName ).load();
+	},
+	
+	/**
+	 * 新增机构
+	 */
+	goRaise	:	function(){
+		
+	},
+	
+	/**
+	 * 修改机构
+	 */
+	goModify	:	function(){
+		
+	},
+	
+	/**
+	 * 查看机构
+	 */
+	goView	:	function(){
+		var _that = this;
+		var orgID = _that.goCheck();
+		if( orgID != null ){
+			/*var goViewUrl = _that.common.myurl + '/view/' + orgID;
+			$.get(goViewUrl,{},function(result){
+				conlog.info(result);
+			});*/
+			$.ajax({
+				url: _that.common.myurl + '/view',//?orgID=' + orgID, 
+				param:{'orgID':orgID},
+				type: 'GET'
+			}).done(function (result) {
+				if( result.success ){
+					conlog.info(result);
+				}
+			});
+		}
+	},
+	
+	/**
+	 * 删除机构
+	 */
+	goErase	:	function(){
 		
 	}
 

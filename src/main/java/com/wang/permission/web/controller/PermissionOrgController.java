@@ -6,10 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wang.core.ServiceResult;
 import com.wang.service.param.permission.PermissionOrgParam;
 import com.wang.service.service.permission.PermissionOrgService;
 
@@ -56,17 +58,37 @@ public class PermissionOrgController extends BaseController {
 	 */
 	@RequestMapping(value="/page",method=RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> pageOrg( PermissionOrgParam org,Integer start,Integer length/*,Integer draw*/ ){
+	public Map<String,Object> pageOrg( PermissionOrgParam org,Integer start,Integer length ){
 		Map<String,Object> map =null;
 		try {
 			org.setPageSize(length);
 			org.setPageNumber(start/length+1);
-			//org.setDraw(draw);
 			
 			map = permissionOrgService.pageOrg(org).getResult();
 		} catch (Exception e) {
 			logger.error("异常发生在"+this.getClass().getName()+"类的pageOrg方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
 		}
 		return map;
+	}
+	
+	/**
+	 * 查看机构
+	 * @param orgID 机构ID
+	 * @return 机构信息
+	 * @author HeJiawang
+	 * @date   2016.10.10
+	 */
+	//@RequestMapping(value="/view/{orgID}",method=RequestMethod.GET)
+	@RequestMapping(value="/view",method=RequestMethod.GET)
+	@ResponseBody
+	public ServiceResult<Map<String, Object>> getOrgByID( /*@PathVariable("orgID") */Integer orgID ){
+		ServiceResult<Map<String, Object>> result = null;
+		try {
+			result = permissionOrgService.getOrgByID(orgID);
+		} catch (Exception e) {
+			logger.error("异常发生在"+this.getClass().getName()+"类的getOrgByID方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		
+		return result;
 	}
 }

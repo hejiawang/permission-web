@@ -117,17 +117,17 @@
 					<div class="col-xs-12">
 						<div class="col-xs-12">
 							<div id="elementbut" style="padding-bottom: 10px;">
-								<button id="goRaise" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >新增</button>
-								<button id="goModify" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >修改</button>
-								<button id="goView" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >查看</button>
-								<button id="goErase" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >删除</button>
+								<button id="goRaise" onclick="permission.org.goRaise();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >新增</button>
+								<button id="goModify" onclick="permission.org.goModify();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >修改</button>
+								<button id="goView" onclick="permission.org.goView();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >查看</button>
+								<button id="goErase" onclick="permission.org.goErase();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >删除</button>
 							</div>
 					    </div>	
 						<div class="col-xs-12" style="background-color: #F0F0F0; padding-top: 10px; padding-bottom: 10px;">
 						    <input class="input-sm" id="orgCodeSerch"  placeholder="查询机构代码"   type="text">
 					        <input class="input-sm" id="orgNameSerch" placeholder="查询机构名称" type="text" >
-					        <input class="btn btn-info" type="button" value="检索" id="goSearch" style="margin-left: 20px;"/>	
-					        <input class="btn btn-info" type="button" value="清空" id="goReset" style="margin-left: 20px;"/>
+					        <input class="btn btn-info" type="button" value="检索" id="goSearch" onclick="permission.org.goSearch();" style="margin-left: 20px;"/>	
+					        <input class="btn btn-info" type="button" value="清空" id="goReset" onclick="permission.org.goReset();" style="margin-left: 20px;"/>
 							<div class="table-responsive" style="margin-top: 10px;">
 								<table id="example" class="table table-striped table-bordered table-hover">
 								
