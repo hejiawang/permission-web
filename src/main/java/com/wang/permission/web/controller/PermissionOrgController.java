@@ -1,5 +1,6 @@
 package com.wang.permission.web.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -69,6 +70,63 @@ public class PermissionOrgController extends BaseController {
 			logger.error("异常发生在"+this.getClass().getName()+"类的pageOrg方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
 		}
 		return map;
+	}
+	
+	/**
+	 * 根据父机构ID获取机构树
+	 * @param id	父机构ID
+	 * @return		机构树
+	 * @author HeJiawang
+	 * @date   2016.10.11
+	 */
+	@RequestMapping(value="/trees",method = RequestMethod.GET,produces="text/plain;charset=UTF-8")
+	public @ResponseBody String queryOrgForTree(Integer id){
+		StringBuffer sb=new StringBuffer();
+		try{
+			if(id == null){
+				id = 0;//根
+			}
+			List<PermissionOrgParam> list = permissionOrgService.findOrgForTree(id).getResult();//所有机构
+			PermissionOrgParam orgs;
+			sb.append("[");
+			for (int i = 0; i < list.size(); i++) {
+				orgs = list.get(i);
+				if(id == orgs.getOrgID()){
+					if(i==(list.size()-1)){
+						if(orgs.getIsParent()>0){
+							sb.append("{id:"+orgs.getOrgID()+",name:\""+orgs.getOrgName()+"\",checked:true,open:true,isParent:true}");
+						}else{
+							sb.append("{id:"+orgs.getOrgID()+",name:\""+orgs.getOrgName()+"\",open:true,checked:true}");
+						}
+					}else{
+						if(orgs.getIsParent()>0){
+							sb.append("{id:"+orgs.getOrgID()+",name:\""+orgs.getOrgName()+"\",checked:true,open:true,isParent:true},");
+						}else{
+							sb.append("{id:"+orgs.getOrgID()+",name:\""+orgs.getOrgName()+"\",open:true,checked:true},");
+						}
+					}
+				}else{
+					if(i==(list.size()-1)){
+						if(orgs.getIsParent()>0){
+							sb.append("{id:"+orgs.getOrgID()+",name:\""+orgs.getOrgName()+"\",open:true,isParent:true}");
+						}else{
+							sb.append("{id:"+orgs.getOrgID()+",name:\""+orgs.getOrgName()+"\",open:true}");
+						}
+					}else{
+						if(orgs.getIsParent()>0){
+							sb.append("{id:"+orgs.getOrgID()+",name:\""+orgs.getOrgName()+"\",open:true,isParent:true},");
+						}else{
+							sb.append("{id:"+orgs.getOrgID()+",name:\""+orgs.getOrgName()+"\",open:true},");
+						}
+					}
+				}
+			}
+			sb.append("]");
+			logger.info("org树JSON====="+sb.toString());
+		}catch(Exception e){
+			logger.error("异常发生在"+this.getClass().getName()+"类的queryOrgForTree方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		return sb.toString();
 	}
 	
 	/**

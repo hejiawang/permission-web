@@ -34,7 +34,26 @@ permission.org = {
 		 */
 		nodeId	: 1001,
 	},
-		
+
+	/**
+	 * 机构树参数
+	 */
+	treeSetting	:	{
+		view: {
+			selectedMulti: false
+		},
+		async: {
+			enable		:	true,
+			url			:	permission.domainUrl.baseDomain + '/org/trees',
+			dataType	:	"text",
+			type		:	"get",
+			autoParam	:	["id"]
+		},
+		callback: {
+			beforeClick	: 	this.treeBeforeClick
+		} 
+	},
+	
 	/**
 	 * 数据初始化
 	 */
@@ -42,7 +61,29 @@ permission.org = {
 		var _that = this;
 		jQuery.ajaxSetup({cache:false});
 		
+		_that.initTree();
 		_that.initTable();
+	},
+	
+	
+	
+	/**
+	 * 初始化机构树
+	 */
+	initTree	:	function(){
+		var _that = this;
+		$.fn.zTree.init($("#treeDemo"), _that.treeSetting);
+	},
+	
+	/**
+	 * 机构树点击事件
+	 */
+	treeBeforeClick	:	function( treeId, treeNode ){
+		var _that = this
+		_that.common.nodeId = treeNode.id;
+		var table = $('#example').DataTable();
+		table.ajax.url(_that.common.myurl + '/page').load();
+		return true;
 	},
 	
 	/**
@@ -165,28 +206,28 @@ permission.org = {
 	 * 判断是否选中组织列表数据
 	 */
 	goCheck	:	function(){
-		 var ids = document.getElementsByName("selectOrgID");
-   		 var count = 0;
-   		 var id =0;
-   		 for (var i=0;i<ids.length;i++ ){
-   		     if(ids[i].checked){ //判断复选框是否选中
-   		     	count=count+1;
-   		     }
-   		 }
-   		 if(count==0){
-   			 alert("请选择要操作的行！");
-   			 return id;
-   		 }else if(count>1){
-   			 alert("只能操作一行数据！");
-   			 return id;
-   		 }else if(count==1){
-   			for (var i=0;i<ids.length;i++ ){
-      		     if(ids[i].checked){ 
-  		            id=ids[i].value;
-      		     }
-      		 }
+		var ids = document.getElementsByName("selectOrgID");
+   		var count = 0;
+   		var id =0;
+   		for (var i=0;i<ids.length;i++ ){
+   			if(ids[i].checked){ //判断复选框是否选中
+   				count=count+1;
+   			}
+   		}
+   		if(count==0){
+   			layer.msg("请选择要操作的行！");
    			return id;
-   		 }
+   		}else if(count>1){
+   			layer.msg("只能操作一行数据！");
+   			return id;
+   		}else if(count==1){
+   			for (var i=0;i<ids.length;i++ ){
+			    if(ids[i].checked){ 
+		           id=ids[i].value;
+			    }
+      		}
+   			return id;
+   		}
 	},
 	
 	/**
@@ -233,7 +274,7 @@ permission.org = {
 	goView	:	function(){
 		var _that = this;
 		var orgID = _that.goCheck();
-		if( orgID != null ){
+		if( orgID != 0 ){
 			var goViewUrl = _that.common.myurl + '/view/' + orgID;
 			
 			$.ajax({
@@ -241,11 +282,46 @@ permission.org = {
 				data : {},
 				type: "get",
 				dataType : 'json',
-				success:function(result) {
-					console.log(result);
-				}
+				success: _that.goViewSuccess
 			});
 		}
+	},
+	
+	/**
+	 * 查看机构成功的回调函数
+	 */
+	goViewSuccess	:	function(result){
+		 $("#validation-form input").each(function(index){
+			 $(this).attr("disabled","disabled");
+		 });
+		 $("#validation-form textarea").each(function(index){
+			 $(this).attr("disabled","disabled");
+		 });
+		 
+		 var data = result.result;
+		 $("#orgCode").val(data.orgCode);
+		 $("#orgName").val(data.orgName);
+		 $("#orgShortName").val(data.orgShortName);
+		 $("#orgLevel").val(data.orgLevel);
+		 $("#parentID").val(data.parentOrgName);
+		 $("#sortNum").val(data.sortNum);
+		 $("#theNote").val(data.theNote);
+		
+		$("#dialog-message").removeClass('hide').dialog({
+			modal : true,
+			title : "机构查看",
+			title_html : true,
+			width : 600,
+			buttons : [ {
+				text : "关闭",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					$(this).dialog("close");
+				}
+			}
+
+			]
+		});
 	},
 	
 	/**
@@ -254,7 +330,11 @@ permission.org = {
 	goErase	:	function(){
 		var _that = this;
 		var orgID = _that.goCheck();
-		if( orgID != null ){
+		if( orgID != 0 ){
+			if( orgID == 1001 ){
+				layer.msg("机构树信息不可删除");
+			}
+			
 			var goEraseUrl = _that.common.myurl + '/erase/' + orgID;
 			
 			$.ajax({
@@ -263,7 +343,10 @@ permission.org = {
 				type: "get",
 				dataType : 'json',
 				success:function(result) {
-					console.log(result);
+					layer.msg(result.message);
+					
+					var table = $('#example').DataTable();
+					table.ajax.url(_that.common.myurl + '/page').load();
 				}
 			});
 		}

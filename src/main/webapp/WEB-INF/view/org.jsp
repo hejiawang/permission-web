@@ -112,31 +112,110 @@
 				<!-- search end -->
 			</div>
 
-			<div class="page-content">
-                <div class="row">
-					<div class="col-xs-12">
+			<div class="page-content  col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+				<div class="zTreeDemoBackground left col-lg-3 col-md-3 col-sm-12 col-xs-12">
+					<ul id="treeDemo" class="ztree">
+					</ul>
+				</div>
+				<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+	                <div class="row">
 						<div class="col-xs-12">
-							<div id="elementbut" style="padding-bottom: 10px;">
-								<button id="goRaise" onclick="permission.org.goRaise();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >新增</button>
-								<button id="goModify" onclick="permission.org.goModify();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >修改</button>
-								<button id="goView" onclick="permission.org.goView();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >查看</button>
-								<button id="goErase" onclick="permission.org.goErase();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >删除</button>
+							<div class="col-xs-12">
+								<div id="elementbut" style="padding-bottom: 10px;">
+									<button id="goRaise" onclick="permission.org.goRaise();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >新增</button>
+									<button id="goModify" onclick="permission.org.goModify();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >修改</button>
+									<button id="goView" onclick="permission.org.goView();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >查看</button>
+									<button id="goErase" onclick="permission.org.goErase();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >删除</button>
+								</div>
+						    </div>	
+							<div class="col-xs-12" style="background-color: #F0F0F0; padding-top: 10px; padding-bottom: 10px;">
+							    <input class="input-sm" id="orgCodeSerch"  placeholder="查询机构代码"   type="text">
+						        <input class="input-sm" id="orgNameSerch" placeholder="查询机构名称" type="text" >
+						        <input class="btn btn-info" type="button" value="检索" id="goSearch" onclick="permission.org.goSearch();" style="margin-left: 20px;"/>	
+						        <input class="btn btn-info" type="button" value="清空" id="goReset" onclick="permission.org.goReset();" style="margin-left: 20px;"/>
+								<div class="table-responsive" style="margin-top: 10px;">
+									<table id="example" class="table table-striped table-bordered table-hover">
+									
+									</table>  
+								</div><!-- /.table-responsive -->
+							</div><!-- /span -->			  
+						</div>
+						<!-- PAGE CONTENT ENDS -->
+					</div><!-- /.col -->
+				</div>
+				
+				<!-- 隐藏的弹出框 -->
+				<div id="dialog-message"  class="hide">
+					<form  class="form-horizontal" id="validation-form" role="form" action="">
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="orgCode"><span style="color:red">*</span>机构编码:</label>
+							<div class="col-sm-9">
+								<div class="clearfix">
+									<input type="text" id="orgCode" name="orgCode"  class="col-xs-10 col-sm-3" />
+									<span for="orgCode" class="help-block" style="color:red;display:none;" id="orgCodeSpan">机构编码重复!</span>
+								</div>	
 							</div>
-					    </div>	
-						<div class="col-xs-12" style="background-color: #F0F0F0; padding-top: 10px; padding-bottom: 10px;">
-						    <input class="input-sm" id="orgCodeSerch"  placeholder="查询机构代码"   type="text">
-					        <input class="input-sm" id="orgNameSerch" placeholder="查询机构名称" type="text" >
-					        <input class="btn btn-info" type="button" value="检索" id="goSearch" onclick="permission.org.goSearch();" style="margin-left: 20px;"/>	
-					        <input class="btn btn-info" type="button" value="清空" id="goReset" onclick="permission.org.goReset();" style="margin-left: 20px;"/>
-							<div class="table-responsive" style="margin-top: 10px;">
-								<table id="example" class="table table-striped table-bordered table-hover">
-								
-								</table>  
-							</div><!-- /.table-responsive -->
-						</div><!-- /span -->			  
-					</div>
-					<!-- PAGE CONTENT ENDS -->
-				</div><!-- /.col -->
+						</div>
+						<div class="space-2"></div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="orgName"><span style="color:red">*</span>机构名称:</label>
+							<div class="col-sm-9">
+								<div class="clearfix">
+									<input type="text" id="orgName" name="orgName"  class="col-xs-10 col-sm-3" />
+									<span for="orgName" class="help-block" style="color:red;display:none;" id="orgNameSpan">机构名称重复!</span>
+								</div>	
+							</div>
+						</div>
+						<div class="space-2"></div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="orgShortName">机构简写:</label>
+							<div class="col-sm-9">
+								<div class="clearfix">
+									<input type="text" id="orgShortName" name="orgShortName"  class="col-xs-10 col-sm-3" />
+								</div>	
+							</div>
+						</div>
+						<div class="space-2"></div>
+						<div class="form-group" id="orgLevelDiv">
+							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="orgLevel"><span style="color:red">*</span>等级:</label>
+							<div class="col-sm-9">
+								<div class="clearfix">
+									<input type="text" id="orgLevel" name="orgLevel"  class="col-xs-10 col-sm-3" />
+								</div>	
+							</div>
+						</div>
+						<div class="space-2"></div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="parentID"><span style="color:red">*</span>所属机构:</label>
+							<div class="col-sm-9">
+								<div class="clearfix">
+									<input type="text" id="parentID" name="parentID" readonly="readonly" class="col-xs-10 col-sm-3" />
+									<input type="hidden" id="parentOrgID" name="parentOrgID" value=""  class="col-xs-10 col-sm-3" />
+								</div>	
+							</div>
+						</div>
+						<div class="space-2"></div>
+						<div class="form-group" id="sortNumDiv" style="display:none;">
+							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="sortNum"><span style="color:red">*</span>顺序:</label>
+							<div class="col-sm-9">
+								<div class="clearfix">
+									<input type="text" id="sortNum" name="sortNum"  class="col-xs-10 col-sm-3" />
+								</div>	
+							</div>		
+						</div>	
+						<div class="space-2"></div>
+						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="theNote">备注:</label>
+							<div class="col-sm-9">
+								<div class="clearfix">
+									<textarea class="input-xlarge" id="theNote" name="theNote" maxlength="50"></textarea>
+								</div>	
+							</div>		
+						</div>	
+						<input type="hidden" id="orgID" name="orgID"/>
+					</form>
+				</div>
+				
 				<%@include file="resource/footer.jsp"%>
 	            <!-- footer end -->
 	            <!-- upper start -->
