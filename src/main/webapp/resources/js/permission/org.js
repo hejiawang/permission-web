@@ -40,7 +40,7 @@ permission.org = {
 	 */
 	init	:	function(){
 		var _that = this;
-		//jQuery.ajaxSetup({cache:false});
+		jQuery.ajaxSetup({cache:false});
 		
 		_that.initTable();
 	},
@@ -234,17 +234,15 @@ permission.org = {
 		var _that = this;
 		var orgID = _that.goCheck();
 		if( orgID != null ){
-			/*var goViewUrl = _that.common.myurl + '/view/' + orgID;
-			$.get(goViewUrl,{},function(result){
-				conlog.info(result);
-			});*/
+			var goViewUrl = _that.common.myurl + '/view/' + orgID;
+			
 			$.ajax({
-				url: _that.common.myurl + '/view',//?orgID=' + orgID, 
-				param:{'orgID':orgID},
-				type: 'GET'
-			}).done(function (result) {
-				if( result.success ){
-					conlog.info(result);
+				url : goViewUrl,
+				data : {},
+				type: "get",
+				dataType : 'json',
+				success:function(result) {
+					console.log(result);
 				}
 			});
 		}
@@ -254,7 +252,21 @@ permission.org = {
 	 * 删除机构
 	 */
 	goErase	:	function(){
-		
+		var _that = this;
+		var orgID = _that.goCheck();
+		if( orgID != null ){
+			var goEraseUrl = _that.common.myurl + '/erase/' + orgID;
+			
+			$.ajax({
+				url : goEraseUrl,
+				data : {},
+				type: "get",
+				dataType : 'json',
+				success:function(result) {
+					console.log(result);
+				}
+			});
+		}
 	}
 
 }
