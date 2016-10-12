@@ -140,7 +140,9 @@ permission.org = {
 			autoParam	:	["id"]
 		},
 		callback: {
-			beforeClick	: 	this.treeBeforeClick
+			beforeClick	: 	function(treeId, treeNode){
+				permission.org.treeBeforeClick(treeId, treeNode);
+			}
 		} 
 	},
 	
@@ -165,7 +167,7 @@ permission.org = {
 			enable : true,
 			url : permission.domainUrl.baseDomain + '/org/trees',
 			dataType : "text",
-			type : "post",
+			type : "get",
 			autoParam : [ "id" ]
 		}
 	},
@@ -388,6 +390,9 @@ permission.org = {
 				click : function() {
 					var zTree = $.fn.zTree.getZTreeObj("parentTree");
 					nodes = zTree.getCheckedNodes(true);
+					if( nodes.length == 0 ){
+						layer.msg("请选择所属机构");
+					}
 					var parId = nodes[0].id;
 					var parName = nodes[0].name;
 					$("#parentOrgID").val(parId);
@@ -425,10 +430,11 @@ permission.org = {
 		var _that = this;
 		
 		 $("#validation-form input").each(function(index){
-			 $(this).attr("disabled","");
+			 
+			 $(this).removeAttr("disabled","");
 		 });
 		 $("#validation-form textarea").each(function(index){
-			 $(this).attr("disabled","");
+			 $(this).removeAttr("disabled","");
 		 });
 		 
 		 $("#orgID").val("");
@@ -454,6 +460,7 @@ permission.org = {
 					text: "确定",
 					"class" : "btn btn-primary btn-xs",
 					click: function() {
+						var dialog_that = this;
 						if($("#validation-form").valid()){
 							var goRaiseUrl = _that.common.myurl + '/raise';
 							$.ajax({
@@ -462,10 +469,16 @@ permission.org = {
 								type: "post",
 								dataType : 'json',
 								success: function( result ){
-									lay.msg(resule.message);
+									layer.msg(result.message);
+
 									if(result.success){
-										$(this).dialog( "close" ); 
+										$( dialog_that ).dialog( "close" ); 
+
+										$.fn.zTree.init($("#treeDemo"), _that.treeSetting);
+										var table = $('#example').DataTable();
+										table.ajax.url(_that.common.myurl + '/page').load();
 									}
+									
 								}
 							});
 						}
@@ -504,7 +517,7 @@ permission.org = {
 	 * 修改机构——方法
 	 */
 	goViewSuccessForModify	:	function(result){
-		var _that = this;
+		var _that = permission.org;
 		
 		var data = result.result;
 		$("#orgID").val(data.orgID);
@@ -513,14 +526,15 @@ permission.org = {
 		$("#orgShortName").val(data.orgShortName);
 		$("#orgLevel").val(data.orgLevel);
 		$("#parentID").val(data.parentOrgName);
+		$("#parentOrgID").val(data.parentOrgID);
 		$("#sortNum").val(data.sortNum);
 		$("#theNote").val(data.theNote);
 		
 		$("#validation-form input").each(function(index){
-			 $(this).attr("disabled","");
+			 $(this).removeAttr("disabled","");
 		 });
 		 $("#validation-form textarea").each(function(index){
-			 $(this).attr("disabled","");
+			 $(this).removeAttr("disabled","");
 		 });
 		 
 		 $("#parentID").delegate("","click",function (){
@@ -536,18 +550,25 @@ permission.org = {
 					text: "确定",
 					"class" : "btn btn-primary btn-xs",
 					click: function() {
+						var dialog_that = this;
 						if($("#validation-form").valid()){
-							var goRaiseUrl = _that.common.myurl + '/modify';
+							var goModifyUrl = _that.common.myurl + '/modify';
 							$.ajax({
-								url : goRaiseUrl,
+								url : goModifyUrl,
 								data : $("#validation-form").serialize(),
 								type: "post",
 								dataType : 'json',
 								success: function( result ){
-									lay.msg(resule.message);
+									layer.msg(result.message);
+
 									if(result.success){
-										$(this).dialog( "close" ); 
+										$( dialog_that ).dialog( "close" ); 
+										
+										$.fn.zTree.init($("#treeDemo"), _that.treeSetting);
+										var table = $('#example').DataTable();
+										table.ajax.url(_that.common.myurl + '/page').load();
 									}
+									
 								}
 							});
 						}
@@ -630,17 +651,25 @@ permission.org = {
 			
 			var goEraseUrl = _that.common.myurl + '/erase/' + orgID;
 			
-			$.ajax({
-				url : goEraseUrl,
-				data : {},
-				type: "get",
-				dataType : 'json',
-				success:function(result) {
-					layer.msg(result.message);
-					
-					var table = $('#example').DataTable();
-					table.ajax.url(_that.common.myurl + '/page').load();
-				}
+			layer.confirm('确认删除机构信息！', {
+				  btn: ['删除','取消'], //按钮
+				  shade: false //不显示遮罩
+			}, function(){
+				$.ajax({
+					url : goEraseUrl,
+					data : {},
+					type: "get",
+					dataType : 'json',
+					success:function(result) {
+						layer.msg(result.message);
+						
+						$.fn.zTree.init($("#treeDemo"), _that.treeSetting);
+						
+						var table = $('#example').DataTable();
+						table.ajax.url(_that.common.myurl + '/page').load();
+					}
+				});
+			}, function(){
 			});
 		}
 	}

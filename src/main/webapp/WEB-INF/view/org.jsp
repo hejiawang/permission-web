@@ -195,7 +195,7 @@
 							</div>
 						</div>
 						<div class="space-2"></div>
-						<div class="form-group" id="sortNumDiv" style="display:none;">
+						<div class="form-group" id="sortNumDiv">
 							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="sortNum"><span style="color:red">*</span>顺序:</label>
 							<div class="col-sm-9">
 								<div class="clearfix">
