@@ -180,7 +180,7 @@
 							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="orgLevel"><span style="color:red">*</span>等级:</label>
 							<div class="col-sm-9">
 								<div class="clearfix">
-									<input type="text" id="orgLevel" name="orgLevel"  class="col-xs-10 col-sm-3" />
+									<input type="text" id="orgLevel" name="orgLevel" readonly="readonly" class="col-xs-10 col-sm-3" />
 								</div>	
 							</div>
 						</div>
@@ -214,6 +214,11 @@
 						</div>	
 						<input type="hidden" id="orgID" name="orgID"/>
 					</form>
+				</div>
+				<div id="parentTree-message" class="hide">
+					<div class="zTreeDemoBackground left"  >
+							<ul id="parentTree" class="ztree"></ul>
+					</div>
 				</div>
 				
 				<%@include file="resource/footer.jsp"%>

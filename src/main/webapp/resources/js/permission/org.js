@@ -33,6 +33,96 @@ permission.org = {
 		 * 机构节点
 		 */
 		nodeId	: 1001,
+		
+		/**
+		 * 表单验证
+		 */
+		validate : $('#validation-form').validate({
+			errorElement: 'div',
+			errorClass: 'help-block',
+			focusInvalid: false,
+			rules: {
+				orgCode: {
+					required: true,
+					maxlength: 50,
+				},
+				orgName: {
+					required: true,
+					maxlength: 100,
+				},
+				orgShortName: {
+					required: false,
+					maxlength: 30,
+				},
+				parentID: {
+					required: true
+				},
+				orgLevel: {
+					required: true,
+					number: true,
+					maxlength: 6,
+				},
+				parentOrgID: {
+					required: false
+				},
+				sortNum: {
+					required: true,
+					number: true,
+					maxlength: 6
+				},
+				theNote: {
+					required: false,
+					maxlength: 300
+				}
+			},
+			
+			messages: {
+				orgCode: {
+					required: "必填!",
+					maxlength: "最多填写50位字符!"
+				},
+				orgName: {
+					required: "必填!",
+					maxlength: "最多填写100位字符!"
+				},
+				orgShortName: {
+					maxlength: "最多填写30位字符!"
+				},
+				parentID: {
+					required: "必填!"
+				},
+				orgLevel: {
+					required: "必填!",
+					number: "必须为正整数!",
+					maxlength: "最多填写6位数字!"
+				},
+				sortNum: {
+					required: "必填！",
+					number: "必须为正整数!",
+					maxlength: "最多填写6位数字!"
+				},
+				theNote: {
+					maxlength:"最多填写300位字符!"
+				}
+			},
+			
+			invalidHandler: function (event, validator) { //display error alert on form submit   
+				$('.alert-danger', $('.login-form')).show();
+			},
+			
+			highlight: function (e) {
+				$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+			},
+			
+			success: function (e) {
+				$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+				$(e).remove();
+			},
+			submitHandler: function (form) {
+			},
+			invalidHandler: function (form) {
+			}
+		}),
 	},
 
 	/**
@@ -52,6 +142,32 @@ permission.org = {
 		callback: {
 			beforeClick	: 	this.treeBeforeClick
 		} 
+	},
+	
+	/**
+	 * 父机构树参数
+	 */
+	parentTreeSetting	:	{
+		view : {
+			dblClickExpand : false
+		},
+		check : {
+			enable : true,
+			chkStyle : "radio",
+			radioType : "all"
+		},
+		data : {
+			simpleData : {
+				enable : true
+			}
+		},
+		async : {
+			enable : true,
+			url : permission.domainUrl.baseDomain + '/org/trees',
+			dataType : "text",
+			type : "post",
+			autoParam : [ "id" ]
+		}
 	},
 	
 	/**
@@ -82,7 +198,7 @@ permission.org = {
 		var _that = this
 		_that.common.nodeId = treeNode.id;
 		var table = $('#example').DataTable();
-		table.ajax.url(_that.common.myurl + '/page').load();
+		table.ajax.url(_that.common.myurl + '/page?orgID=' + treeNode.id).load();
 		return true;
 	},
 	
@@ -255,17 +371,196 @@ permission.org = {
 	},
 	
 	/**
+	 * 所属机构树
+	 */
+	parentOrgTrees : function() {
+		var _that = this;
+		
+		$.fn.zTree.init($("#parentTree"), _that.parentTreeSetting);
+		$("#parentTree-message").removeClass('hide').dialog({
+			modal : true,
+			title : "所属机构",
+			title_html : true,
+			width : 300,
+			buttons : [{
+				text : "确定",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					var zTree = $.fn.zTree.getZTreeObj("parentTree");
+					nodes = zTree.getCheckedNodes(true);
+					var parId = nodes[0].id;
+					var parName = nodes[0].name;
+					$("#parentOrgID").val(parId);
+					$("#parentID").val(parName);
+					if ($(this).dialog("close").length > 0) {
+						
+						var getParentOrgUrl = _that.common.myurl + '/view/' + parId;
+						$.ajax({
+							url : getParentOrgUrl,
+							data : {},
+							type: "get",
+							dataType : 'json',
+							success: function(result){
+								 var data = result.result;
+								 $("#orgLevel").val(data.orgLevel + 1);
+							}
+						});
+					}
+					$(this).dialog("close");
+				}
+			}, {
+				text : "关闭",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					$(this).dialog("close");
+				}
+			}]
+		});
+	},
+	
+	/**
 	 * 新增机构
 	 */
 	goRaise	:	function(){
+		var _that = this;
 		
+		 $("#validation-form input").each(function(index){
+			 $(this).attr("disabled","");
+		 });
+		 $("#validation-form textarea").each(function(index){
+			 $(this).attr("disabled","");
+		 });
+		 
+		 $("#orgID").val("");
+		 $("#orgCode").val("");
+		 $("#orgName").val("");
+		 $("#orgShortName").val("");
+		 $("#orgLevel").val("");
+		 $("#parentID").val("");
+		 $("#parentOrgID").val("");
+		 $("#sortNum").val("");
+		 $("#theNote").val("");
+		 
+		 $("#parentID").delegate("","click",function (){
+			 _that.parentOrgTrees();
+		 });
+		 
+		 $("#dialog-message").removeClass('hide').dialog({
+			 modal: true,
+		     title: "所属机构新增",
+		     title_html: true,
+			 width:600,
+		     buttons: [ {
+					text: "确定",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						if($("#validation-form").valid()){
+							var goRaiseUrl = _that.common.myurl + '/raise';
+							$.ajax({
+								url : goRaiseUrl,
+								data : $("#validation-form").serialize(),
+								type: "post",
+								dataType : 'json',
+								success: function( result ){
+									lay.msg(resule.message);
+									if(result.success){
+										$(this).dialog( "close" ); 
+									}
+								}
+							});
+						}
+					} 
+				},
+				{
+					text: "关闭",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						$( this ).dialog( "close" ); 
+					} 
+				}]
+		 });
 	},
 	
 	/**
 	 * 修改机构
 	 */
 	goModify	:	function(){
+		var _that = this;
+		var orgID = _that.goCheck();
+		if( orgID != 0 ){
+			var goViewUrl = _that.common.myurl + '/view/' + orgID;
+			
+			$.ajax({
+				url : goViewUrl,
+				data : {},
+				type: "get",
+				dataType : 'json',
+				success: _that.goViewSuccessForModify
+			});
+		}
+	},
+	
+	/**
+	 * 修改机构——方法
+	 */
+	goViewSuccessForModify	:	function(result){
+		var _that = this;
 		
+		var data = result.result;
+		$("#orgID").val(data.orgID);
+		$("#orgCode").val(data.orgCode);
+		$("#orgName").val(data.orgName);
+		$("#orgShortName").val(data.orgShortName);
+		$("#orgLevel").val(data.orgLevel);
+		$("#parentID").val(data.parentOrgName);
+		$("#sortNum").val(data.sortNum);
+		$("#theNote").val(data.theNote);
+		
+		$("#validation-form input").each(function(index){
+			 $(this).attr("disabled","");
+		 });
+		 $("#validation-form textarea").each(function(index){
+			 $(this).attr("disabled","");
+		 });
+		 
+		 $("#parentID").delegate("","click",function (){
+			 _that.parentOrgTrees();
+		 });
+		 
+		 $("#dialog-message").removeClass('hide').dialog({
+			 modal: true,
+		     title: "所属机构修改",
+		     title_html: true,
+			 width:600,
+		     buttons: [ {
+					text: "确定",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						if($("#validation-form").valid()){
+							var goRaiseUrl = _that.common.myurl + '/modify';
+							$.ajax({
+								url : goRaiseUrl,
+								data : $("#validation-form").serialize(),
+								type: "post",
+								dataType : 'json',
+								success: function( result ){
+									lay.msg(resule.message);
+									if(result.success){
+										$(this).dialog( "close" ); 
+									}
+								}
+							});
+						}
+					} 
+				},
+				{
+					text: "关闭",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						$( this ).dialog( "close" ); 
+					} 
+				}]
+		 });
 	},
 	
 	/**
@@ -318,9 +613,7 @@ permission.org = {
 				click : function() {
 					$(this).dialog("close");
 				}
-			}
-
-			]
+			} ]
 		});
 	},
 	
