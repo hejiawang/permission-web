@@ -105,6 +105,7 @@
 						<a href="index">我的工作台</a>
 					</li>
 					<li class="active">权限管理</li>
+					<li class="active">机构管理</li>
 				</ul><!-- /.breadcrumb -->
 
 				<!-- search start -->
