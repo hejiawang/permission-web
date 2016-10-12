@@ -16,4 +16,12 @@
         </a>
 	    <b class="arrow"></b>
     </li>
+    
+    <li id="baseData" class="">
+        <a href="post">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text" style="font-family: 微软雅黑">岗位管理</span>
+        </a>
+	    <b class="arrow"></b>
+    </li>
 </ul><!-- /.nav-list -->
