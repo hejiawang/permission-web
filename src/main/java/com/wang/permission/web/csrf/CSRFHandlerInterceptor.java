@@ -32,6 +32,9 @@ public class CSRFHandlerInterceptor extends HandlerInterceptorAdapter {
 		
 		DIRECT_URLS.add("/org/raise");
 		DIRECT_URLS.add("/org/modify");
+		
+		DIRECT_URLS.add("/post/raise");
+		DIRECT_URLS.add("/post/modify");
 	}
 
 	@Override

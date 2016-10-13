@@ -130,6 +130,25 @@ public class PermissionPostController extends BaseController {
 		
 		return result;
 	}
-
+	
+	/**
+	 * 修改岗位
+	 * @param post 岗位信息
+	 * @return ServiceResult
+	 * @author HeJiawang
+	 * @date   2016.10.13
+	 */
+	@RequestMapping(value="/modify",method=RequestMethod.POST)
+	@ResponseBody
+	public ServiceResult<Void> modifyPost( PermissionPostParam post ){
+		ServiceResult<Void> result = null;
+		try {
+			result = permissionPostService.updatePost(post);
+		} catch (Exception e) {
+			logger.error("异常发生在"+this.getClass().getName()+"类的modifyPost方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		
+		return result;
+	}
 	
 }
