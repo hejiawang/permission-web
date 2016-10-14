@@ -33,4 +33,12 @@
 	    <b class="arrow"></b>
     </li>
     
+    <li id="baseData" class="">
+        <a href="role">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text" style="font-family: 微软雅黑">角色管理</span>
+        </a>
+	    <b class="arrow"></b>
+    </li>
+    
 </ul><!-- /.nav-list -->
