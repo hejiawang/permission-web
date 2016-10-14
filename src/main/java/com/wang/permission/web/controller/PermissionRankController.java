@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wang.core.ServiceResult;
-import com.wang.service.param.permission.PermissionOrgParam;
 import com.wang.service.param.permission.PermissionRankParam;
 import com.wang.service.service.permission.PermissionRankService;
 
@@ -169,4 +168,45 @@ public class PermissionRankController extends BaseController  {
 		
 		return result;
 	}
+	
+	/**
+	 * 新增职级
+	 * @param rank 职级信息
+	 * @return ServiceResult
+	 * @author HeJiawang
+	 * @date   2016.10.13
+	 */
+	@RequestMapping(value="/raise",method=RequestMethod.POST)
+	@ResponseBody
+	public ServiceResult<Void> raiseRank( PermissionRankParam rank ){
+		ServiceResult<Void> result = null;
+		try {
+			result = permissionRankService.addRank(rank);
+		} catch (Exception e) {
+			logger.error("异常发生在"+this.getClass().getName()+"类的raiseRank方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 修改职级
+	 * @param  rank	职级信息
+	 * @return ServiceResult
+	 * @author HeJiawang
+	 * @date   2016.10.13
+	 */
+	@RequestMapping(value="/modify",method=RequestMethod.POST)
+	@ResponseBody
+	public ServiceResult<Void> modifyRank( PermissionRankParam rank ){
+		ServiceResult<Void> result = null;
+		try {
+			result = permissionRankService.updateRank(rank);
+		} catch (Exception e) {
+			logger.error("异常发生在"+this.getClass().getName()+"类的modifyRank方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		
+		return result;
+	}
+	
 }

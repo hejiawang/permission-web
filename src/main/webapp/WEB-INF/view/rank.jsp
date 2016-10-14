@@ -130,7 +130,6 @@
 								</div>
 						    </div>	
 							<div class="col-xs-12" style="background-color: #F0F0F0; padding-top: 10px; padding-bottom: 10px;">
-							    <input class="input-sm" id="rankCodeSerch"  placeholder="查询职级代码"   type="text">
 						        <input class="input-sm" id="rankNameSerch" placeholder="查询职级名称" type="text" >
 						        <input class="btn btn-info" type="button" value="检索" id="goSearch" onclick="permission.org.goSearch();" style="margin-left: 20px;"/>	
 						        <input class="btn btn-info" type="button" value="清空" id="goReset" onclick="permission.org.goReset();" style="margin-left: 20px;"/>
