@@ -1,35 +1,30 @@
 var permission = permission || {};
 
 /**
- * 职级js
+ * 系统类型js
  * 
  * @author HeJiawang
- * @date   2016.10.12
+ * @date   2016.10.16
  */
-permission.rank = {
-
+permission.appType = {
+	
 	/**
 	 * 消息
 	 */
 	message    : {
 		netWorkError: '网络异常,请稍后重试!'
 	},
-	
+		
 	common	:	{
 		/**
-		 * 职级url
+		 * 系统类型url
 		 */
-		myurl	:	permission.domainUrl.baseDomain + '/rank',
+		myurl	:	permission.domainUrl.baseDomain + '/appType',
 		
 		/**
-		 * 职级列表选中项
+		 * 系统类型列表选中项
 		 */
 		tableRowDateObj	: Object,
-		
-		/**
-		 * 职级节点
-		 */
-		nodeId	: 1001,
 		
 		/**
 		 * 表单验证
@@ -39,20 +34,9 @@ permission.rank = {
 			errorClass: 'help-block',
 			focusInvalid: false,
 			rules: {
-				rankName: {
+				appTypeName: {
 					required: true,
 					maxlength: 100,
-				},
-				parentID: {
-					required: true
-				},
-				rankLevel: {
-					required: true,
-					number: true,
-					maxlength: 6,
-				},
-				parentRankID: {
-					required: false
 				},
 				sortNum: {
 					required: true,
@@ -66,17 +50,9 @@ permission.rank = {
 			},
 			
 			messages: {
-				rankName: {
+				appTypeName: {
 					required: "必填!",
 					maxlength: "最多填写100位字符!"
-				},
-				parentID: {
-					required: "必填!"
-				},
-				rankLevel: {
-					required: "必填!",
-					number: "必须为正整数!",
-					maxlength: "最多填写6位数字!"
 				},
 				sortNum: {
 					required: "必填！",
@@ -105,56 +81,7 @@ permission.rank = {
 			invalidHandler: function (form) {
 			}
 		}),
-		
 	},
-	
-	/**
-	 * 职级树参数
-	 */
-	treeSetting	:	{
-		view: {
-			selectedMulti: false
-		},
-		async: {
-			enable		:	true,
-			url			:	permission.domainUrl.baseDomain + '/rank/trees',
-			dataType	:	"text",
-			type		:	"get",
-			autoParam	:	["id"]
-		},
-		callback: {
-			beforeClick	: 	function(treeId, treeNode){
-				permission.rank.treeBeforeClick(treeId, treeNode);
-			}
-		} 
-	},
-	
-	/**
-	 * 父职级树参数
-	 */
-	parentTreeSetting	:	{
-		view : {
-			dblClickExpand : false
-		},
-		check : {
-			enable : true,
-			chkStyle : "radio",
-			radioType : "all"
-		},
-		data : {
-			simpleData : {
-				enable : true
-			}
-		},
-		async : {
-			enable : true,
-			url : permission.domainUrl.baseDomain + '/rank/trees',
-			dataType : "text",
-			type : "get",
-			autoParam : [ "id" ]
-		}
-	},
-
 	
 	/**
 	 * 数据初始化
@@ -162,31 +89,11 @@ permission.rank = {
 	init	:	function(){
 		var _that = this;
 		
-		_that.initTree();
 		_that.initTable();
 	},
 	
 	/**
-	 * 初始化职级树
-	 */
-	initTree	:	function(){
-		var _that = this;
-		$.fn.zTree.init($("#treeDemo"), _that.treeSetting);
-	},
-	
-	/**
-	 * 职级树点击事件
-	 */
-	treeBeforeClick	:	function( treeId, treeNode ){
-		var _that = this
-		_that.common.nodeId = treeNode.id;
-		var table = $('#example').DataTable();
-		table.ajax.url(_that.common.myurl + '/page?rankID=' + treeNode.id).load();
-		return true;
-	},
-	
-	/**
-	 * 初始化职级表单
+	 * 初始化系统类型表单
 	 */
 	initTable	:	function(){
 		var _that = this;
@@ -203,30 +110,26 @@ permission.rank = {
 			},
 			"columns" : [
 				{
-					"data" : "rankID",
+					"data" : "appTypeID",
 					"orderable" : false,
 					"visible" : true,
 					"width" : "5%",
 					"render" : function(data, type, full, meta) {
-						return '<input type="checkbox" name="selectRankID" value="' + data + '"/>';
+						return '<input type="checkbox" name="selectAppTypeID" value="' + data + '"/>';
 					},
 				}, {
-					"title" : "职级名称",
-					"data" : "rankName",
-					"orderable" : false,
-				}, {
-					"title" : "等级",
-					"data" : "rankLevel",
-					"orderable" : false,
-				}, {
-					"title" : "所属职级",
-					"data" : "parentRankName",
+					"title" : "系统类型名称",
+					"data" : "appTypeName",
 					"orderable" : false,
 				}, {
 					"title" : "顺序",
 					"data" : "sortNum",
 					"orderable" : false,
-			} ],
+				} , {
+					"title" : "备注",
+					"data" : "theNote",
+					"orderable" : false,
+				} ],
 		});
 
 		_that.singleSelectFun();
@@ -234,8 +137,9 @@ permission.rank = {
 		_that.getTableRowData();
 	},
 	
+	
 	/**
-	 * 为职级表单绑定点击事件
+	 * 为系统类型表单绑定点击事件
 	 */
 	getTableRowData	:	function(){
 		var _that = this;
@@ -246,7 +150,7 @@ permission.rank = {
 	},
 	
 	/**
-	 * 为职级表单复选框绑定单选
+	 * 为系统类型表单复选框绑定单选
 	 */
 	singleSelectFun	:	function(){
 		var _that = this;
@@ -255,18 +159,18 @@ permission.rank = {
 		$('#example tbody').on( 'click', 'tr', function () {
 			var index = table.row( this ).index();
 			if(lastSelectItem<0){//如果未选中
-				$("#example input[name=selectRankID]:eq("+index+")").prop("checked",true);
+				$("#example input[name=selectAppTypeID]:eq("+index+")").prop("checked",true);
 				$(this).addClass("selected");
 				lastSelectItem = index;
 			}else{//如果选中
 				if(lastSelectItem==index){//如果选的是上一个
-			        $("#example input[name=selectRankID]:eq("+lastSelectItem+")").prop("checked",false);
+			        $("#example input[name=selectAppTypeID]:eq("+lastSelectItem+")").prop("checked",false);
 			        $("#example tbody tr:eq("+lastSelectItem+")").removeClass("selected");
 			        lastSelectItem = -1;
 				}else{
-					$("#example input[name=selectRankID]:eq("+lastSelectItem+")").prop("checked",false);
+					$("#example input[name=selectAppTypeID]:eq("+lastSelectItem+")").prop("checked",false);
 					 $("#example tbody tr:eq("+lastSelectItem+")").removeClass("selected");
-					$("#example input[name=selectRankID]:eq("+index+")").prop("checked",true);
+					$("#example input[name=selectAppTypeID]:eq("+index+")").prop("checked",true);
 					$(this).addClass("selected");
 					lastSelectItem = index;	
 				}
@@ -275,7 +179,7 @@ permission.rank = {
 	}, 
 
 	/**
-	 * 为职级表单绑定翻页事件
+	 * 为系统类型表单绑定翻页事件
 	 */
 	pageLengthChangeFun	:	function(){
 		var _that = this;
@@ -285,7 +189,7 @@ permission.rank = {
 	},
 	
 	/**
-	 * 重新加载职级表单
+	 * 重新加载系统类型表单
 	 */
 	reloadDatatables	:	function(){
 		var _that = this;
@@ -294,10 +198,10 @@ permission.rank = {
 	},
 	
 	/**
-	 * 判断是否选中职级列表数据
+	 * 判断是否选中组织列表数据
 	 */
 	goCheck	:	function(){
-		var ids = document.getElementsByName("selectRankID");
+		var ids = document.getElementsByName("selectAppTypeID");
    		var count = 0;
    		var id =0;
    		for (var i=0;i<ids.length;i++ ){
@@ -328,8 +232,8 @@ permission.rank = {
 		var _that = this;
 		
 		var table = $('#example').DataTable();
-		$("#rankNameSerch").val("");
-		table.ajax.url( _that.common.myurl+"/page?rankID=" + _that.common.nodeId).load();
+		$("#appTypeNameSerch").val("");
+		table.ajax.url( _that.common.myurl+"/page").load();
 	},
 	
 	/**
@@ -339,63 +243,92 @@ permission.rank = {
 		var _that = this;
 		
 		var table = $('#example').DataTable();
-		var rankName = $("#rankNameSerch").val();
-		table.ajax.url( _that.common.myurl+"/page?rankID=" + _that.common.nodeId + "&rankName=" + rankName ).load();
+		var appTypeName = $("#appTypeNameSerch").val();
+		table.ajax.url( _that.common.myurl+"/page?appTypeName=" + appTypeName ).load();
 	},
 	
 	/**
-	 * 所属职级树
+	 * 删除系统类型
 	 */
-	parentRankTrees : function() {
+	goErase	:	function(){
 		var _that = this;
-		
-		$.fn.zTree.init($("#parentTree"), _that.parentTreeSetting);
-		$("#parentTree-message").removeClass('hide').dialog({
-			modal : true,
-			title : "所属职级",
-			title_html : true,
-			width : 300,
-			buttons : [{
-				text : "确定",
-				"class" : "btn btn-primary btn-xs",
-				click : function() {
-					var zTree = $.fn.zTree.getZTreeObj("parentTree");
-					nodes = zTree.getCheckedNodes(true);
-					if( nodes.length == 0 ){
-						layer.msg("请选择所属职级");
-					}
-					var parId = nodes[0].id;
-					var parName = nodes[0].name;
-					$("#parentRankID").val(parId);
-					$("#parentID").val(parName);
-					if ($(this).dialog("close").length > 0) {
+		var appTypeID = _that.goCheck();
+		if( appTypeID != 0 ){
+			var goEraseUrl = _that.common.myurl + '/erase/' + appTypeID;
+			
+			layer.confirm('确认删除系统类型信息！', {
+				  btn: ['删除','取消'], //按钮
+				  shade: false //不显示遮罩
+			}, function(){
+				$.ajax({
+					url : goEraseUrl,
+					data : {},
+					type: "get",
+					dataType : 'json',
+					success:function(result) {
+						layer.msg(result.message);
 						
-						var getParentRankUrl = _that.common.myurl + '/view/' + parId;
-						$.ajax({
-							url : getParentRankUrl,
-							data : {},
-							type: "get",
-							dataType : 'json',
-							success: function(result){
-								 var data = result.result;
-								 $("#rankLevel").val(data.rankLevel + 1);
-							}
-						});
+						var table = $('#example').DataTable();
+						table.ajax.url(_that.common.myurl + '/page').load();
 					}
-					$(this).dialog("close");
-				}
-			}, {
+				});
+			}, function(){
+			});
+		}
+	},
+	
+	/**
+	 * 查看系统类型
+	 */
+	goView	:	function(){
+		var _that = this;
+		var appTypeID = _that.goCheck();
+		if( appTypeID != 0 ){
+			var goViewUrl = _that.common.myurl + '/view/' + appTypeID;
+			
+			$.ajax({
+				url : goViewUrl,
+				data : {},
+				type: "get",
+				dataType : 'json',
+				success: _that.goViewSuccess
+			});
+		}
+	},
+	
+	/**
+	 * 查看系统类型成功的回调函数
+	 */
+	goViewSuccess	:	function(result){
+		 $("#validation-form input").each(function(index){
+			 $(this).attr("disabled","disabled");
+		 });
+		 $("#validation-form textarea").each(function(index){
+			 $(this).attr("disabled","disabled");
+		 });
+		 
+		 var data = result.result;
+		 $("#appTypeName").val(data.appTypeName);
+		 $("#sortNum").val(data.sortNum);
+		 $("#theNote").val(data.theNote);
+		
+		$("#dialog-message").removeClass('hide').dialog({
+			modal : true,
+			title : "系统类型查看",
+			title_html : true,
+			width : 600,
+			buttons : [ {
 				text : "关闭",
 				"class" : "btn btn-primary btn-xs",
 				click : function() {
 					$(this).dialog("close");
 				}
-			}]
+			} ]
 		});
 	},
 	
 	/**
-	 * 新增职级
+	 * 新增系统类型
 	 */
 	goRaise	:	function(){
 		var _that = this;
@@ -407,21 +340,14 @@ permission.rank = {
 			 $(this).removeAttr("disabled","");
 		 });
 		 
-		 $("#rankID").val("");
-		 $("#rankName").val("");
-		 $("#rankLevel").val("");
-		 $("#parentID").val("");
-		 $("#parentRankID").val("");
+		 $("#appTypeID").val("");
+		 $("#appTypeName").val("");
 		 $("#sortNum").val("");
 		 $("#theNote").val("");
 		 
-		 $("#parentID").delegate("","click",function (){
-			 _that.parentRankTrees();
-		 });
-		 
 		 $("#dialog-message").removeClass('hide').dialog({
 			 modal: true,
-		     title: "新增职级",
+		     title: "新增系统类型",
 		     title_html: true,
 			 width:600,
 		     buttons: [ {
@@ -442,11 +368,9 @@ permission.rank = {
 									if(result.success){
 										$( dialog_that ).dialog( "close" ); 
 
-										$.fn.zTree.init($("#treeDemo"), _that.treeSetting);
 										var table = $('#example').DataTable();
 										table.ajax.url(_that.common.myurl + '/page').load();
 									}
-									
 								}
 							});
 						}
@@ -463,18 +387,13 @@ permission.rank = {
 	},
 	
 	/**
-	 * 修改职级
+	 * 修改系统类型
 	 */
 	goModify	:	function(){
 		var _that = this;
-		var rankID = _that.goCheck();
-		if( rankID != 0 ){
-			if( rankID == 1001 ){
-				layer.msg("职级树信息不可修改");
-				return;
-			}
-			
-			var goViewUrl = _that.common.myurl + '/view/' + rankID;
+		var appTypeID = _that.goCheck();
+		if( appTypeID != 0 ){
+			var goViewUrl = _that.common.myurl + '/view/' + appTypeID;
 			
 			$.ajax({
 				url : goViewUrl,
@@ -487,17 +406,14 @@ permission.rank = {
 	},
 	
 	/**
-	 * 修改职级——方法
+	 * 修改系统类型——方法
 	 */
 	goViewSuccessForModify	:	function(result){
-		var _that = permission.rank;
+		var _that = permission.appType;
 		
 		var data = result.result;
-		$("#rankID").val(data.rankID);
-		$("#rankName").val(data.rankName);
-		$("#rankLevel").val(data.rankLevel);
-		$("#parentID").val(data.parentRankName);
-		$("#parentRankID").val(data.parentRankID);
+		$("#appTypeID").val(data.appTypeID);
+		$("#appTypeName").val(data.appTypeName);
 		$("#sortNum").val(data.sortNum);
 		$("#theNote").val(data.theNote);
 		
@@ -508,13 +424,9 @@ permission.rank = {
 			 $(this).removeAttr("disabled","");
 		 });
 		 
-		 $("#parentID").delegate("","click",function (){
-			 _that.parentRankTrees();
-		 });
-		 
 		 $("#dialog-message").removeClass('hide').dialog({
 			 modal: true,
-		     title: "修改职级",
+		     title: "修改系统类型",
 		     title_html: true,
 			 width:600,
 		     buttons: [ {
@@ -535,11 +447,9 @@ permission.rank = {
 									if(result.success){
 										$( dialog_that ).dialog( "close" ); 
 										
-										$.fn.zTree.init($("#treeDemo"), _that.treeSetting);
 										var table = $('#example').DataTable();
 										table.ajax.url(_that.common.myurl + '/page').load();
 									}
-									
 								}
 							});
 						}
@@ -553,94 +463,6 @@ permission.rank = {
 					} 
 				}]
 		 });
-	},
-	
-	/**
-	 * 查看职级
-	 */
-	goView	:	function(){
-		var _that = this;
-		var rankID = _that.goCheck();
-		if( rankID != 0 ){
-			var goViewUrl = _that.common.myurl + '/view/' + rankID;
-			
-			$.ajax({
-				url : goViewUrl,
-				data : {},
-				type: "get",
-				dataType : 'json',
-				success: _that.goViewSuccess
-			});
-		}
-	},
-	
-	/**
-	 * 查看职级成功的回调函数
-	 */
-	goViewSuccess	:	function(result){
-		 $("#validation-form input").each(function(index){
-			 $(this).attr("disabled","disabled");
-		 });
-		 $("#validation-form textarea").each(function(index){
-			 $(this).attr("disabled","disabled");
-		 });
-		 
-		 var data = result.result;
-		 $("#rankName").val(data.rankName);
-		 $("#rankLevel").val(data.rankLevel);
-		 $("#parentID").val(data.parentRankName);
-		 $("#sortNum").val(data.sortNum);
-		 $("#theNote").val(data.theNote);
-		
-		$("#dialog-message").removeClass('hide').dialog({
-			modal : true,
-			title : "职级查看",
-			title_html : true,
-			width : 600,
-			buttons : [ {
-				text : "关闭",
-				"class" : "btn btn-primary btn-xs",
-				click : function() {
-					$(this).dialog("close");
-				}
-			} ]
-		});
-	},
-	
-	/**
-	 * 删除职级
-	 */
-	goErase	:	function(){
-		var _that = this;
-		var rankID = _that.goCheck();
-		if( rankID != 0 ){
-			if( rankID == 1001 ){
-				layer.msg("职级树信息不可删除");
-			}
-			
-			var goEraseUrl = _that.common.myurl + '/erase/' + rankID;
-			
-			layer.confirm('确认删除职级信息！', {
-				  btn: ['删除','取消'], //按钮
-				  shade: false //不显示遮罩
-			}, function(){
-				$.ajax({
-					url : goEraseUrl,
-					data : {},
-					type: "get",
-					dataType : 'json',
-					success:function(result) {
-						layer.msg(result.message);
-						
-						$.fn.zTree.init($("#treeDemo"), _that.treeSetting);
-						
-						var table = $('#example').DataTable();
-						table.ajax.url(_that.common.myurl + '/page').load();
-					}
-				});
-			}, function(){
-			});
-		}
 	}
 	
 }

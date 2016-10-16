@@ -501,6 +501,9 @@ permission.org = {
 		var _that = this;
 		var orgID = _that.goCheck();
 		if( orgID != 0 ){
+			if( orgID == 1001 ){
+				layer.msg("机构树信息不可修改");
+			}
 			var goViewUrl = _that.common.myurl + '/view/' + orgID;
 			
 			$.ajax({
