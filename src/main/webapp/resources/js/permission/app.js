@@ -620,7 +620,7 @@ permission.app = {
 	 * 应用系统所属类型
 	 */
 	appTypeTrees	:	function(){
-		vat _that = this;
+		var _that = this;
 		
 		var appTypeID = $("#appTypeID").val();
 		$.get(_that.common.appTypeTreesUrl, {'id':appTypeID}, function(data) {
