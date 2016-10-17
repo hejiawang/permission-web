@@ -47,7 +47,7 @@ public class PermissionOperationController extends BaseController {
 	 * @author HeJiawang
 	 * @date   2016.10.17
 	 */
-	@RequestMapping(value="/trees/app",method = RequestMethod.POST,produces="text/plain;charset=UTF-8")
+	@RequestMapping(value="/trees/app",method = RequestMethod.GET,produces="text/plain;charset=UTF-8")
 	public @ResponseBody String queryAppOperationForTree(Integer appID){
 		StringBuffer sb=new StringBuffer();
 		try{
