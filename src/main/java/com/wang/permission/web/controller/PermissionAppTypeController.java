@@ -1,5 +1,6 @@
 package com.wang.permission.web.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wang.core.ServiceResult;
+import com.wang.service.entity.permission.PermissionAppTypeEntity;
 import com.wang.service.param.permission.PermissionAppTypeParam;
 import com.wang.service.service.permission.PermissionAppTypeService;
 
@@ -149,6 +151,50 @@ public class PermissionAppTypeController extends BaseController {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 获取系统类型树信息
+	 * @param id	appTypeID
+	 * @return 系统类型树信息
+	 * @author HeJiawang
+	 * @date   2016.10.16
+	 */
+	@RequestMapping(value="/trees", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
+	public @ResponseBody String queryAppTypeForTree(Integer id){
+		StringBuffer sb=new StringBuffer();
+		try{
+			List<PermissionAppTypeEntity> list = permissionAppTypeService.getAllAppType().getResult();	//所有apptype
+			PermissionAppTypeEntity types;
+			sb.append("[");
+			if(id==null){
+				id=0;
+			}
+			if(list!=null && list.size()>0){
+				for (int i = 0; i < list.size(); i++) {
+					types = list.get(i);
+					if(i==(list.size()-1)){
+						if(id.intValue()==types.getAppTypeID().intValue()){
+							sb.append("{id:"+types.getAppTypeID()+",name:\""+types.getAppTypeName()+"\",checked:true}");
+						}else{
+							sb.append("{id:"+types.getAppTypeID()+",name:\""+types.getAppTypeName()+"\"}");
+						}
+					}else{
+						if(id.intValue()==types.getAppTypeID().intValue()){
+							sb.append("{id:"+types.getAppTypeID()+",name:\""+types.getAppTypeName()+"\",checked:true},");
+						}else{
+							sb.append("{id:"+types.getAppTypeID()+",name:\""+types.getAppTypeName()+"\"},");
+						}
+					}
+				}
+			}
+			
+			sb.append("]");
+			logger.debug("appType树JSON====="+sb.toString());
+		}catch(Exception e){
+			logger.info("异常发生在"+this.getClass().getName()+"类的queryAppTypeForTree方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		return sb.toString();
 	}
 	
 }

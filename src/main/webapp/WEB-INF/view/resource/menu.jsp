@@ -49,4 +49,12 @@
 	    <b class="arrow"></b>
     </li>
     
+    <li id="appData" class="">
+        <a href="app">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text" style="font-family: 微软雅黑">应用系统</span>
+        </a>
+	    <b class="arrow"></b>
+    </li>
+    
 </ul><!-- /.nav-list -->
