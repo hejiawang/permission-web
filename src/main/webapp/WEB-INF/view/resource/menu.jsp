@@ -57,4 +57,12 @@
 	    <b class="arrow"></b>
     </li>
     
+    <li id="menuData" class="">
+        <a href="menu">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text" style="font-family: 微软雅黑">菜单管理</span>
+        </a>
+	    <b class="arrow"></b>
+    </li>
+    
 </ul><!-- /.nav-list -->
