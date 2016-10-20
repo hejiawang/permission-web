@@ -61,8 +61,8 @@ public class PermissionAppController extends BaseController {
 	public Map<String,Object> pageApp( PermissionAppParam app,Integer start,Integer length ){
 		Map<String,Object> map =null;
 		try {
-			app.setPageSize(length);
-			app.setPageNumber(start/length+1);
+			app.setPageStart(start);
+			app.setPageEnd(start+length);
 			
 			map = permissionAppService.pageApp(app).getResult();
 		} catch (Exception e) {

@@ -61,8 +61,8 @@ public class PermissionRoleController extends BaseController {
 	public Map<String,Object> pageRole( PermissionRoleParam role,Integer start,Integer length ){
 		Map<String,Object> map =null;
 		try {
-			role.setPageSize(length);
-			role.setPageNumber(start/length+1);
+			role.setPageStart(start);
+			role.setPageEnd(start+length);
 			
 			map = permissionRoleService.pageRole(role).getResult();
 		} catch (Exception e) {

@@ -61,8 +61,8 @@ public class PermissionPostController extends BaseController {
 	public Map<String,Object> pagePost( PermissionPostParam post,Integer start,Integer length ){
 		Map<String,Object> map =null;
 		try {
-			post.setPageSize(length);
-			post.setPageNumber(start/length+1);
+			post.setPageStart(start);
+			post.setPageEnd(start+length);
 			
 			map = permissionPostService.pagePost(post).getResult();
 		} catch (Exception e) {

@@ -62,8 +62,8 @@ public class PermissionRankController extends BaseController  {
 	public Map<String,Object> pageRank( PermissionRankParam rank,Integer start,Integer length ){
 		Map<String,Object> map =null;
 		try {
-			rank.setPageSize(length);
-			rank.setPageNumber(start/length+1);
+			rank.setPageStart(start);
+			rank.setPageEnd(start+length);
 			
 			map = permissionRankService.pageRank(rank).getResult();
 		} catch (Exception e) {

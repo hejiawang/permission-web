@@ -62,8 +62,8 @@ public class PermissionOrgController extends BaseController {
 	public Map<String,Object> pageOrg( PermissionOrgParam org,Integer start,Integer length ){
 		Map<String,Object> map =null;
 		try {
-			org.setPageSize(length);
-			org.setPageNumber(start/length+1);
+			org.setPageStart(start);
+			org.setPageEnd(start+length);
 			
 			map = permissionOrgService.pageOrg(org).getResult();
 		} catch (Exception e) {

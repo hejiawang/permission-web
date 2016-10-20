@@ -135,8 +135,8 @@ public class PermissionMenuController extends BaseController {
 	public Map<String,Object> pageMenu( PermissionMenuParam menu,Integer start,Integer length ){
 		Map<String,Object> map =null;
 		try {
-			menu.setPageSize(length);
-			menu.setPageNumber(start/length+1);
+			menu.setPageStart(start);
+			menu.setPageEnd(start+length);
 			
 			map = permissionMenuService.pageMenu(menu).getResult();
 		} catch (Exception e) {
