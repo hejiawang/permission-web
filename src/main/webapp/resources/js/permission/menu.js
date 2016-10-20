@@ -158,7 +158,7 @@ permission.menu = {
 		var _that = this;
 		jQuery.ajaxSetup({cache:false});
 		
-		//_that.initTable();
+		_that.initTable();
 		_that.initTree();
 	},
 	
