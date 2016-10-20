@@ -160,7 +160,7 @@ public class PermissionAppTypeController extends BaseController {
 	 * @author HeJiawang
 	 * @date   2016.10.16
 	 */
-	@RequestMapping(value="/trees", method = RequestMethod.POST, produces="text/plain;charset=UTF-8")
+	@RequestMapping(value="/trees", method = RequestMethod.GET, produces="text/plain;charset=UTF-8")
 	public @ResponseBody String queryAppTypeForTree(Integer id){
 		StringBuffer sb=new StringBuffer();
 		try{

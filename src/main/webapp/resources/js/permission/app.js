@@ -54,7 +54,7 @@ permission.app = {
 				operationID: {
 					required: true,
 				},
-				urls: {
+				url: {
 					required: true,
 					maxlength: 100
 				},
@@ -83,7 +83,7 @@ permission.app = {
 				operationID: {
 					required: "操作必选!",
 				},
-				urls: {
+				url: {
 					required: "链接必填",
 					maxlength: "最多填写100位字符!"
 				},
@@ -546,7 +546,7 @@ permission.app = {
 	 * 修改机构——方法
 	 */
 	goViewSuccessForModify	:	function(result){
-		var _that = permission.org;
+		var _that = permission.app;
 		
 		var data = result.result;
 		 $("#appTypeID").val(data.appTypeID);
@@ -554,7 +554,7 @@ permission.app = {
 		 $("#appName").val(data.appName);
 		 $("#operationName").val(data.operationNames);
 		 $("#operationID").val(data.operationIDs);
-		 $("#urls").val(data.url);
+		 $("#url").val(data.url);
 		 $("#iconStyle").val(data.iconStyle);
 		 $("#sortNum").val(data.sortNum);
 		 $("#theNote").val(data.theNote);	
@@ -669,7 +669,7 @@ permission.app = {
 		var _that = this;
 		
 		var appID = $("#appID").val();
-		$.post( _that.common.operationUrl, {'appID':appID}, function(data) {
+		$.get( _that.common.operationUrl, {'appID':appID}, function(data) {
 			var  zNodesRaises = eval(data);
 			$.fn.zTree.init($("#appopTree"), _that.operationTreesSettings,zNodesRaises);
 		});

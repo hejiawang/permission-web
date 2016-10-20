@@ -167,8 +167,8 @@
 							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="operationID"><span style="color:red">*</span>操作:</label>
 							<div class="col-xs-12 col-sm-9">
 								<div class="clearfix">
-									<input type="text" id="operationName" readonly="readonly" name="operationName"  class="col-xs-12 col-sm-6" />
-									<input type="hidden" id="operationID" name="operationID"  class="col-xs-12 col-sm-6" />
+									<input type="text" id="operationName" readonly="readonly" name="operationNames"  class="col-xs-12 col-sm-6" />
+									<input type="hidden" id="operationID" name="operationIDs"  class="col-xs-12 col-sm-6" />
 								</div>	
 							</div>
 						</div>
