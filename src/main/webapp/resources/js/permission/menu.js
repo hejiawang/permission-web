@@ -559,7 +559,7 @@ permission.menu = {
 					success:function(result) {
 						layer.msg(result.message);
 						
-						$.fn.zTree.init($("#treeDemo"), _that.treeSetting);
+						$.fn.zTree.init($("#treeDemo"), _that.menuTreeSetting);
 						var table = $('#example').DataTable();
 						table.ajax.url(_that.common.myurl + '/page').load();
 					}
@@ -628,22 +628,21 @@ permission.menu = {
 					$("#parentName").val(parName);
 					$("#parentType").val(parentType);
 					if ($(this).dialog("close").length > 0) {
-						
-						var getParentOrgUrl = _that.common.myurl + '/view/' + parId;
-						$.ajax({
-							url : getParentOrgUrl,
-							data : {},
-							type: "get",
-							dataType : 'json',
-							success: function(result){
-								 var data = result.result;
-								 if( data == null ){
-									 $("#menuLevel").val(1);
-								 } else {
-									 $("#menuLevel").val(data.menuLevel + 1);
-								 }
-							}
-						});
+						if( parentType == 'SYS_APP' ){
+							 $("#menuLevel").val(1);
+						} else {
+							var getParentOrgUrl = _that.common.myurl + '/getMenuByResourceID/' + parId;
+							$.ajax({
+								url : getParentOrgUrl,
+								data : {},
+								type: "get",
+								dataType : 'json',
+								success: function(result){
+									var data = result.result;
+									$("#menuLevel").val(data.menuLevel + 1);
+								}
+							});
+						}
 					}
 					$(this).dialog("close");
 				}

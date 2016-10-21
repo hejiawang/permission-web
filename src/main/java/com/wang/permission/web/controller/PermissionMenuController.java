@@ -70,7 +70,7 @@ public class PermissionMenuController extends BaseController {
 		PermissionResourceParam resource = permissionResourceService.getResourceByID( id = id==null?-1:id ).getResult();
 		Integer parID = 0;
 		if(resource != null){
-			parID = resource.getSelfID();
+			parID = resource.getResourceID();
 		}
 		try{
 			List<PermissionResourceParam> listApp = new ArrayList<PermissionResourceParam>();
@@ -185,6 +185,25 @@ public class PermissionMenuController extends BaseController {
 			result = permissionMenuService.getMenuByID(menuID);
 		} catch (Exception e) {
 			logger.info("异常发生在"+this.getClass().getName()+"类的getMenu方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		return result;
+	}
+	
+	/**
+	 * 通过资源ID获取菜单信息
+	 * @param menuID menuID
+	 * @return 应用系统信息
+	 * @author HeJiawang
+	 * @date   2016.10.21
+	 */
+	@RequestMapping(value="/getMenuByResourceID/{resourceID}",method=RequestMethod.GET)
+	@ResponseBody 
+	public ServiceResult<PermissionMenuParam> getMenuByResourceID(@PathVariable("resourceID") Integer resourceID){
+		ServiceResult<PermissionMenuParam> result = null;
+		try {
+			result = permissionMenuService.getMenuByResourceID(resourceID);
+		} catch (Exception e) {
+			logger.info("异常发生在"+this.getClass().getName()+"类的getMenuByResourceID方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
 		}
 		return result;
 	}
