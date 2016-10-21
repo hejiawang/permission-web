@@ -166,15 +166,6 @@
 						</div>
 						<div class="space-2"></div>
 						<div class="form-group">
-							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="menuLevel"><span style="color:red">*</span>菜单级别:</label>
-							<div class="col-xs-12 col-sm-9">
-								<div class="clearfix">
-									<input type="text" id="menuLevel" name="menuLevel"  class="col-xs-12 col-sm-6" />
-								</div>	
-							</div>
-						</div>
-						<div class="space-2"></div>
-						<div class="form-group">
 							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="iconStyle"><span style="color:red">*</span>菜单样式:</label>
 							<div class="col-xs-12 col-sm-9">
 								<div class="clearfix">
@@ -196,7 +187,7 @@
 							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="parentName"><span style="color:red">*</span>所属系统菜单:</label>
 							<div class="col-xs-12 col-sm-9">
 								<div class="clearfix">
-									<input type="text" id="parentName" readonly="readonly" name="parentName" onclick="showParentTree();"  class="col-xs-12 col-sm-6" />
+									<input type="text" id="parentName" readonly="readonly" name="parentName" class="col-xs-12 col-sm-6" />
 									<input type="hidden" id="parentID"  name="parentID"  class="col-xs-12 col-sm-6"/>
 									<input type="hidden" id="parentType"  name="parentType"  class="col-xs-12 col-sm-6"/>	
 								</div>
@@ -204,11 +195,20 @@
 						</div>
 						<div class="space-2"></div>
 						<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="menuLevel"><span style="color:red">*</span>菜单级别:</label>
+							<div class="col-xs-12 col-sm-9">
+								<div class="clearfix">
+									<input type="text" id="menuLevel" name="menuLevel" readonly="readonly" class="col-xs-12 col-sm-6" />
+								</div>	
+							</div>
+						</div>
+						<div class="space-2"></div>
+						<div class="form-group">
 							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="operationName"><span style="color:red">*</span>权限:</label>
 							<div class="col-xs-12 col-sm-9">
 								<div class="clearfix">
-									<input type="text" id="operationName" readonly="readonly" name="operationName" onclick="showOperationTree();"  class="col-xs-12 col-sm-6" />
-									<input type="hidden" id="operationID"  name="operationID"  class="col-xs-12 col-sm-6"/>
+									<input type="text" id="operationNames" readonly="readonly" name="operationNames" class="col-xs-12 col-sm-6" />
+									<input type="hidden" id="operationIDs"  name="operationIDs"  class="col-xs-12 col-sm-6"/>
 								</div>
 							</div>
 						</div>

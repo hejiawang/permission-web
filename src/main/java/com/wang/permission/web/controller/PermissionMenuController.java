@@ -8,10 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wang.core.ServiceResult;
 import com.wang.service.param.permission.PermissionMenuParam;
 import com.wang.service.param.permission.PermissionResourceParam;
 import com.wang.service.service.permission.PermissionMenuService;
@@ -147,4 +149,64 @@ public class PermissionMenuController extends BaseController {
 		}
 		return map;
 	}
+	
+	/**
+	 * 新增菜单
+	 * @param  menu 菜单信息
+	 * @return ServiceResult
+	 * @author HeJiawang
+	 * @date   2016.10.21
+	 */
+	@RequestMapping(value="/raise",method=RequestMethod.POST)
+	@ResponseBody
+	public ServiceResult<Void> raiseMenu( PermissionMenuParam menu ){
+		ServiceResult<Void> result = null;
+		try {
+			result = permissionMenuService.addMenu(menu);
+		} catch (Exception e) {
+			logger.error("异常发生在"+this.getClass().getName()+"类的raiseMenu方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * menu查看
+	 * @param menuID menuID
+	 * @return 应用系统信息
+	 * @author HeJiawang
+	 * @date   2016.10.21
+	 */
+	@RequestMapping(value="/view/{menuID}",method=RequestMethod.GET)
+	@ResponseBody 
+	public ServiceResult<PermissionMenuParam> getMenu(@PathVariable("menuID") Integer menuID){
+		ServiceResult<PermissionMenuParam> result = null;
+		try {
+			result = permissionMenuService.getMenuByID(menuID);
+		} catch (Exception e) {
+			logger.info("异常发生在"+this.getClass().getName()+"类的getMenu方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		return result;
+	}
+	
+	/**
+	 * 删除menu
+	 * @param menuID menuID
+	 * @return 返回信息
+	 * @author HeJiawang
+	 * @date   2016.10.21
+	 */
+	@RequestMapping(value="/erase/{menuID}",method=RequestMethod.GET)
+	@ResponseBody
+	public ServiceResult<Void> deleteMenuByID( @PathVariable("menuID") Integer menuID ){
+		ServiceResult<Void> result = null;
+		try {
+			result = permissionMenuService.deleteMenuByID(menuID);
+		} catch (Exception e) {
+			logger.error("异常发生在"+this.getClass().getName()+"类的deleteMenuByID方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		
+		return result;
+	}
+	
 }

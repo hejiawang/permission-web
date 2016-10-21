@@ -25,6 +25,16 @@ permission.menu = {
 		myurl	:	permission.domainUrl.baseDomain + '/menu',
 		
 		/**
+		 * 系统类型树
+		 */
+		menuTreesUrl	:	permission.domainUrl.baseDomain + '/menu/trees',
+		
+		/**
+		 * 操作信息树
+		 */
+		operationUrl	:	permission.domainUrl.baseDomain + '/operation/trees/menu',
+		
+		/**
 		 * 机构列表选中项
 		 */
 		tableRowDateObj	:	Object,
@@ -150,6 +160,48 @@ permission.menu = {
 		} 
 	},
 	
+	/**
+	 * 父菜单树参数
+	 */
+	parentTreeSetting	:	{
+		view : {
+			dblClickExpand : false
+		},
+		check : {
+			enable : true,
+			chkStyle : "radio",
+			radioType : "all"
+		},
+		data : {
+			simpleData : {
+				enable : true
+			}
+		},
+		async : {
+			enable : true,
+			url : permission.domainUrl.baseDomain + '/menu/trees',
+			dataType : "text",
+			type : "get",
+			autoParam : [ "id" ]
+		}
+	},
+	
+	/**
+	 * 操作信息树参数
+	 */
+	operationTreesSettings	:	{
+		check: {
+			enable: true
+		},
+		view: {
+			selectedMulti: false,
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		}
+	},
 	
 	/**
 	 * 数据初始化
@@ -350,5 +402,311 @@ permission.menu = {
 		var menuName = $("#menuNameSerch").val();
 		table.ajax.url( _that.common.myurl+"/page?resourceID=" + _that.common.menuTreeNodeID + "&menuName=" + menuName ).load();
 	},
+	
+	/**
+	 * 新增菜单
+	 */
+	goRaise	:	function(){
+		var _that = this;
+		
+		 $("#validation-form input").each(function(index){
+			 $(this).removeAttr("disabled","");
+		 });
+		 $("#validation-form textarea").each(function(index){
+			 $(this).removeAttr("disabled","");
+		 });
+		 
+		 $("#menuName").val("");
+         $("#url").val("");
+		 $("#iconStyle").val("");
+		 $("#sortNum").val("");
+		 $("#parentName").val("");
+		 $("#parentID").val("");
+		 $("#parentType").val("");
+		 $("#menuLevel").val("");
+		 $("#operationNames").val("");	
+		 $("#operationIDs").val("");	
+		 $("#theNote").val("");	
+		 $("#menuID").val("");	
+		 
+		 $("#parentName").delegate("","click",function (){
+			 _that.parentMenuTrees();
+		 });
+		 $("#operationNames").delegate("","click",function (){
+			 _that.operationTrees();
+		 });
+		 
+		 $("#dialog-message").removeClass('hide').dialog({
+			 modal: true,
+		     title: "新增菜单",
+		     title_html: true,
+			 width:600,
+		     buttons: [ {
+					text: "确定",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						var dialog_that = this;
+						if($("#validation-form").valid()){
+							var goRaiseUrl = _that.common.myurl + '/raise';
+							$.ajax({
+								url : goRaiseUrl,
+								data : $("#validation-form").serialize(),
+								type: "post",
+								dataType : 'json',
+								success: function( result ){
+									layer.msg(result.message);
+
+									if(result.success){
+										$( dialog_that ).dialog( "close" ); 
+
+										$.fn.zTree.init($("#treeDemo"), _that.menuTreeSetting);
+										var table = $('#example').DataTable();
+										table.ajax.url(_that.common.myurl + '/page').load();
+									}
+									
+								}
+							});
+						}
+					} 
+				},
+				{
+					text: "关闭",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						$( this ).dialog( "close" ); 
+					} 
+				}]
+		 });
+	},
+	
+	/**
+	 * 查看菜单
+	 */
+	goView	:	function(){
+		var _that = this;
+		var menuID = _that.goCheck();
+		if( menuID != 0 ){
+			var goViewUrl = _that.common.myurl + '/view/' + menuID;
+			
+			$.ajax({
+				url : goViewUrl,
+				data : {},
+				type: "get",
+				dataType : 'json',
+				success: _that.goViewSuccess
+			});
+		}
+	},
+	
+	/**
+	 * 查看机构成功的回调函数
+	 */
+	goViewSuccess	:	function(result){
+		 $("#validation-form input").each(function(index){
+			 $(this).attr("disabled","disabled");
+		 });
+		 $("#validation-form textarea").each(function(index){
+			 $(this).attr("disabled","disabled");
+		 });
+		 
+		 var data = result.result;
+		 $("#menuName").val(data.menuName);
+         $("#url").val(data.url);
+		 $("#iconStyle").val(data.iconStyle);
+		 $("#sortNum").val(data.sortNum);
+		 $("#parentName").val(data.parentName);
+		 $("#parentID").val(data.parentID);
+		 $("#parentType").val(data.parentType);
+		 $("#menuLevel").val(data.menuLevel);
+		 $("#operationNames").val(data.operationNames);	
+		 $("#operationIDs").val(data.operationIDs);	
+		 $("#theNote").val(data.theNote);	
+		 $("#menuID").val(data.menuID);	
+		
+		$("#dialog-message").removeClass('hide').dialog({
+			modal : true,
+			title : "菜单查看",
+			title_html : true,
+			width : 600,
+			buttons : [ {
+				text : "关闭",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					$(this).dialog("close");
+				}
+			} ]
+		});
+	},
+	
+	/**
+	 * 删除菜单
+	 */
+	goErase	:	function(){
+		var _that = this;
+		var menuID = _that.goCheck();
+		if( menuID != 0 ){
+			var goEraseUrl = _that.common.myurl + '/erase/' + menuID;
+			
+			layer.confirm('确认删除菜单信息！', {
+				  btn: ['删除','取消'], //按钮
+				  shade: false //不显示遮罩
+			}, function(){
+				$.ajax({
+					url : goEraseUrl,
+					data : {},
+					type: "get",
+					dataType : 'json',
+					success:function(result) {
+						layer.msg(result.message);
+						
+						$.fn.zTree.init($("#treeDemo"), _that.treeSetting);
+						var table = $('#example').DataTable();
+						table.ajax.url(_that.common.myurl + '/page').load();
+					}
+				});
+			}, function(){
+			});
+		}
+	},
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * 所属菜单树
+	 */
+	parentMenuTrees	:	function() {
+		var _that = this;
+		
+		$.fn.zTree.init($("#parentTree"), _that.parentTreeSetting);
+		$("#parentTree-message").removeClass('hide').dialog({
+			modal : true,
+			title : "所属菜单",
+			title_html : true,
+			width : 300,
+			buttons : [{
+				text : "确定",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					var zTree = $.fn.zTree.getZTreeObj("parentTree");
+					nodes = zTree.getCheckedNodes(true);
+					if( nodes.length == 0 ){
+						layer.msg("请选择所属菜单");
+					}
+					var parId = nodes[0].id;
+					var parName = nodes[0].name;
+					var parentType = nodes[0].stype;
+					$("#parentID").val(parId);
+					$("#parentName").val(parName);
+					$("#parentType").val(parentType);
+					if ($(this).dialog("close").length > 0) {
+						
+						var getParentOrgUrl = _that.common.myurl + '/view/' + parId;
+						$.ajax({
+							url : getParentOrgUrl,
+							data : {},
+							type: "get",
+							dataType : 'json',
+							success: function(result){
+								 var data = result.result;
+								 if( data == null ){
+									 $("#menuLevel").val(1);
+								 } else {
+									 $("#menuLevel").val(data.menuLevel + 1);
+								 }
+							}
+						});
+					}
+					$(this).dialog("close");
+				}
+			}, {
+				text : "关闭",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					$(this).dialog("close");
+				}
+			}]
+		});
+	},
+	
+	/**
+	 * 操作信息
+	 */
+	operationTrees	:	function(){
+		var _that = this;
+		
+		var menuID = $("#menuID").val();
+		$.get( _that.common.operationUrl, {'menuID':menuID}, function(data) {
+			var  zNodesRaises = eval(data);
+			$.fn.zTree.init($("#operationTree"), _that.operationTreesSettings,zNodesRaises);
+		});
+		
+		var dialogTypes = $("#operationTree-message" ).removeClass('hide').dialog({
+			modal: true,
+			title: "操作",
+			title_html: true,
+			width:300,
+			buttons: [ 
+					{
+						text: "取消",
+						"class" : "btn btn-primary btn-xs",
+						click: function() {
+							$(dialogTypes).dialog("close");
+						} 
+					},
+					{
+						text: "确认",
+						"class" : "btn btn-primary btn-xs",
+						click: function() {
+							var zTree = $.fn.zTree.getZTreeObj("operationTree");
+							nodes = zTree.getCheckedNodes(true);
+							if(nodes.length>0){
+								var opeIds = "";
+								var opeNames ="";
+								for (var i=0, l=nodes.length; i<l; i++) {
+									opeIds = opeIds+ nodes[i].id+",";
+									opeNames = opeNames + nodes[i].name+",";
+								} 
+								opeIds = opeIds.substring(0, opeIds.length-1);
+								opeNames = opeNames.substring(0, opeNames.length-1);
+								$("#operationIDs").val(opeIds);
+								$("#operationNames").val(opeNames);
+								$(dialogTypes).dialog("close");
+							}else{
+								layer.msg("操作必选！");
+							}
+						} 
+					}
+    		]
+		});
+	}
 	
 }

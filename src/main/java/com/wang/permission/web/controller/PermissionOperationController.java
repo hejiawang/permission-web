@@ -94,4 +94,55 @@ public class PermissionOperationController extends BaseController {
 		return sb.toString();
 	}
 	
+	/**
+	 * 获取菜单对应的操作树
+	 * @param menuID 菜单ID
+	 * @return 操作树
+	 * @author HeJiawang
+	 * @date   2016.10.21
+	 */
+	@RequestMapping(value="/trees/menu",method = RequestMethod.GET,produces="text/plain;charset=UTF-8")
+	public @ResponseBody String queryMenuOperationForTree(Integer menuID){
+		StringBuffer sb=new StringBuffer();
+		try{
+			List<PermissionOperationEntity> list = permissionOperationService.getOperationForMenu().getResult();//所有操作
+			List<Integer> opList = new ArrayList<Integer>();
+			if(menuID!=null){
+				PermissionResourceEntity resource = permissionResourceService.getResourceByMenuID(menuID).getResult();
+				opList = permissionOperationService.getOperationIDByResourceID(resource.getResourceID()).getResult();//当前menu对应的操作
+			}
+			PermissionOperationEntity operations;
+			sb.append("[");
+			for (int i = 0; i < list.size(); i++) {
+				operations = list.get(i);
+				if(opList!=null&&opList.size()>0){
+					if(opList.contains(operations.getOperationID())){
+						if(i==(list.size()-1)){
+							sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\",checked:true}");
+						}else{
+							sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\",checked:true},");
+						}
+					}else{
+						if(i==(list.size()-1)){
+							sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\"}");
+						}else{
+							sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\"},");
+						}
+					}
+				}else{
+					if(i==(list.size()-1)){
+						sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\"}");
+					}else{
+						sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\"},");
+					}
+				}
+			}
+			sb.append("]");
+			logger.debug("操作树JSON====="+sb.toString());
+		}catch(Exception e){
+			logger.info("异常发生在"+this.getClass().getName()+"类的queryMenuOperationForTree方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		return sb.toString();
+	}
+	
 }
