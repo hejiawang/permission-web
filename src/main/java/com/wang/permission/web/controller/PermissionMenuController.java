@@ -228,4 +228,24 @@ public class PermissionMenuController extends BaseController {
 		return result;
 	}
 	
+	/**
+	 * 修改菜单
+	 * @param menu 菜单信息
+	 * @return ServiceResult
+	 * @author HeJiawang
+	 * @date   2016.10.22
+	 */
+	@RequestMapping(value="/modify",method=RequestMethod.POST)
+	@ResponseBody
+	public ServiceResult<Void> modifyMenu( PermissionMenuParam menu ){
+		ServiceResult<Void> result = null;
+		try {
+			result = permissionMenuService.updateMenu(menu);
+		} catch (Exception e) {
+			logger.error("异常发生在"+this.getClass().getName()+"类的modifyMenu方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		
+		return result;
+	}
+	
 }

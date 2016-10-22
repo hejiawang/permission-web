@@ -25,7 +25,7 @@ permission.menu = {
 		myurl	:	permission.domainUrl.baseDomain + '/menu',
 		
 		/**
-		 * 系统类型树
+		 * 菜单树
 		 */
 		menuTreesUrl	:	permission.domainUrl.baseDomain + '/menu/trees',
 		
@@ -569,36 +569,101 @@ permission.menu = {
 		}
 	},
 	
+	/**
+	 * 修改菜单
+	 */
+	goModify	:	function(){
+		var _that = this;
+		var menuID = _that.goCheck();
+		if( menuID != 0 ){
+			var goViewUrl = _that.common.myurl + '/view/' + menuID;
+			
+			$.ajax({
+				url : goViewUrl,
+				data : {},
+				type: "get",
+				dataType : 'json',
+				success: _that.goViewSuccessForModify
+			});
+		}
+	},
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 修改机构——方法
+	 */
+	goViewSuccessForModify	:	function(result){
+		var _that = permission.org;
+		
+		var data = result.result;
+		 $("#menuName").val(data.menuName);
+         $("#url").val(data.url);
+		 $("#iconStyle").val(data.iconStyle);
+		 $("#sortNum").val(data.sortNum);
+		 $("#parentName").val(data.parentName);
+		 $("#parentID").val(data.parentID);
+		 $("#parentType").val(data.parentType);
+		 $("#menuLevel").val(data.menuLevel);
+		 $("#operationNames").val(data.operationNames);	
+		 $("#operationIDs").val(data.operationIDs);	
+		 $("#theNote").val(data.theNote);	
+		 $("#menuID").val(data.menuID);	
+		
+		$("#validation-form input").each(function(index){
+			 $(this).removeAttr("disabled","");
+		 });
+		 $("#validation-form textarea").each(function(index){
+			 $(this).removeAttr("disabled","");
+		 });
+		 
+		 $("#parentName").delegate("","click",function (){
+			 _that.parentMenuTrees();
+		 });
+		 $("#operationNames").delegate("","click",function (){
+			 _that.operationTrees();
+		 });
+		 
+		 $("#dialog-message").removeClass('hide').dialog({
+			 modal: true,
+		     title: "修改菜单",
+		     title_html: true,
+			 width:600,
+		     buttons: [ {
+					text: "确定",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						var dialog_that = this;
+						if($("#validation-form").valid()){
+							var goModifyUrl = _that.common.myurl + '/modify';
+							$.ajax({
+								url : goModifyUrl,
+								data : $("#validation-form").serialize(),
+								type: "post",
+								dataType : 'json',
+								success: function( result ){
+									layer.msg(result.message);
+
+									if(result.success){
+										$( dialog_that ).dialog( "close" ); 
+										
+										$.fn.zTree.init($("#treeDemo"), _that.menuTreeSetting);
+										var table = $('#example').DataTable();
+										table.ajax.url(_that.common.myurl + '/page').load();
+									}
+									
+								}
+							});
+						}
+					} 
+				},
+				{
+					text: "关闭",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						$( this ).dialog( "close" ); 
+					} 
+				}]
+		 });
+	},
 	
 	/**
 	 * 所属菜单树
