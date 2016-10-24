@@ -187,7 +187,7 @@
 							<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="parentID"><span style="color:red">*</span>所属菜单:</label>
 							<div class="col-sm-9">
 								<div class="clearfix">
-									<input type="text" id="parentName" name="parentName"  class="col-xs-12 col-sm-6" />
+									<input type="text" id="parentName" name="parentName" readonly="readonly" class="col-xs-12 col-sm-6" />
 									<input type="hidden" id="parentID" name="parentID" class="col-xs-10 col-sm-3"/>
 								</div>	
 							</div>
@@ -197,7 +197,7 @@
 								<label class="control-label col-xs-12 col-sm-3  no-padding-right" for="operationIDs"><span style="color:red">*</span>操作:</label>
 								<div class="col-sm-9">
 									<div class="clearfix">
-										<input type="text" id="operationNames" name="operationNames"  class="col-xs-12 col-sm-6" />
+										<input type="text" id="operationNames" name="operationNames" readonly="readonly" class="col-xs-12 col-sm-6" />
 										<input type="hidden" id="operationIDs" name="operationIDs" class="col-xs-10 col-sm-3"/>
 									</div>	
 								</div>
@@ -212,7 +212,7 @@
 								</div>		
 							</div>	
 						<div class="space-2"></div>		
-						<input type="hidden" id="elementID"/>	
+						<input type="hidden" id="elementID" name = "elementID"/>	
 					</form>
 			   </div>
 				<div id="parentTree-message" class="hide">
@@ -235,9 +235,9 @@
 		</div><!-- /.page-content-area -->
 	</div>
 <!-- inline scripts related to this page -->
-<script type="text/javascript" src="<%= basePath%>resources/js/permission/menu.js"></script>
+<script type="text/javascript" src="<%= basePath%>resources/js/permission/element.js"></script>
 <script type="text/javascript">
-	permission.menu.init();
+	permission.element.init();
 </script>
 </body>
 </html>

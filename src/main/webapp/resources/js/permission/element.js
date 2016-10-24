@@ -22,7 +22,7 @@ permission.element = {
 		/**
 		 * 机构url
 		 */
-		myurl	:	permission.domainUrl.baseDomain + '/menu',
+		myurl	:	permission.domainUrl.baseDomain + '/element',
 		
 		/**
 		 * 菜单树
@@ -380,8 +380,8 @@ permission.element = {
 		var _that = this;
 		
 		var table = $('#example').DataTable();
-		var menuName = $("#elementNameSerch").val();
-		table.ajax.url( _that.common.myurl+"/page?resourceID=" + _that.common.menuTreeNodeID + "&elementName=" + element ).load();
+		var elementName = $("#elementNameSerch").val();
+		table.ajax.url( _that.common.myurl+"/page?resourceID=" + _that.common.menuTreeNodeID + "&elementName=" + elementName ).load();
 	},
 	
 	/**
@@ -569,7 +569,7 @@ permission.element = {
 	 * 修改页面元素——方法
 	 */
 	goViewSuccessForModify	:	function(result){
-		var _that = permission.org;
+		var _that = permission.element;
 		
 		var data = result.result;
 		 $("#elementName").val(data.elementName);
