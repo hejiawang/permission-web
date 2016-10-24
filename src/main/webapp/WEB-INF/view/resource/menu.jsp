@@ -65,4 +65,12 @@
 	    <b class="arrow"></b>
     </li>
     
+    <li id="elementData" class="">
+        <a href="element">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text" style="font-family: 微软雅黑">页面元素</span>
+        </a>
+	    <b class="arrow"></b>
+    </li>
+    
 </ul><!-- /.nav-list -->

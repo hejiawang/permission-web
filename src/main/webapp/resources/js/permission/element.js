@@ -227,7 +227,7 @@ permission.element = {
 	},
 	
 	/**
-	 * 初始化机构表单
+	 * 初始化页面元素表单
 	 */
 	initTable	:	function(){
 		var _that = this;
@@ -252,27 +252,19 @@ permission.element = {
 						return '<input type="checkbox" name="selectID" value="' + data + '"/>';
 					},
 				}, {
-					"data" : "resourceID",
-					"orderable" : false,
-					"visible" : false,
-				},{
-					"title" : "菜单名称",
+					"title" : "名称",
 					"data" : "elementName",
 					"orderable" : false,
 				}, {
-					"title" : "菜单地址",
-					"data" : "url",
+					"title" : "方法名称",
+					"data" : "elementFunction",
 					"orderable" : false,
 				}, {
-					"title" : "菜单样式",
+					"title" : "样式",
 					"data" : "elementStyle",
 					"orderable" : false,
 				}, {
-					"title" : "所属系统菜单",
-					"data" : "parentName",
-					"orderable" : false,
-				}, {
-					"title" : "顺序",
+					"title" : "排序",
 					"data" : "sortNum",
 					"orderable" : false,
 			} ],
@@ -284,7 +276,7 @@ permission.element = {
 	},
 	
 	/**
-	 * 为机构表单绑定点击事件
+	 * 为页面元素表单绑定点击事件
 	 */
 	getTableRowData	:	function(){
 		var _that = this;
@@ -295,7 +287,7 @@ permission.element = {
 	},
 	
 	/**
-	 * 为机构表单复选框绑定单选
+	 * 为页面元素表单复选框绑定单选
 	 */
 	singleSelectFun	:	function(){
 		var _that = this;
@@ -324,7 +316,7 @@ permission.element = {
 	}, 
 
 	/**
-	 * 为机构表单绑定翻页事件
+	 * 为页面元素表单绑定翻页事件
 	 */
 	pageLengthChangeFun	:	function(){
 		var _that = this;
@@ -334,7 +326,7 @@ permission.element = {
 	},
 	
 	/**
-	 * 重新加载机构表单
+	 * 重新加载页面元素表单
 	 */
 	reloadDatatables	:	function(){
 		var _that = this;
@@ -343,7 +335,7 @@ permission.element = {
 	},
 	
 	/**
-	 * 判断是否选中组织列表数据
+	 * 判断是否选中列表数据
 	 */
 	goCheck	:	function(){
 		var ids = document.getElementsByName("selectID");
@@ -391,5 +383,355 @@ permission.element = {
 		var menuName = $("#elementNameSerch").val();
 		table.ajax.url( _that.common.myurl+"/page?resourceID=" + _that.common.menuTreeNodeID + "&elementName=" + element ).load();
 	},
+	
+	/**
+	 * 新增页面元素
+	 */
+	goRaise	:	function(){
+		var _that = this;
+		
+		 $("#validation-form input").each(function(index){
+			 $(this).removeAttr("disabled","");
+		 });
+		 $("#validation-form textarea").each(function(index){
+			 $(this).removeAttr("disabled","");
+		 });
+		 
+		 $("#elementName").val("");
+         $("#sortNum").val("");
+		 $("#elementFunction").val("");
+		 $("#elementStyle").val("");
+		 $("#parentName").val("");
+		 $("#parentID").val("");
+		 $("#operationNames").val("");	
+		 $("#operationIDs").val("");	
+		 $("#theNote").val("");	
+		 $("#elementID").val("");	
+		 
+		 $("#parentName").delegate("","click",function (){
+			 _that.parentMenuTrees();
+		 });
+		 $("#operationNames").delegate("","click",function (){
+			 _that.operationTrees();
+		 });
+		 
+		 $("#dialog-message").removeClass('hide').dialog({
+			 modal: true,
+		     title: "新增页面元素",
+		     title_html: true,
+			 width:600,
+		     buttons: [ {
+					text: "确定",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						var dialog_that = this;
+						if($("#validation-form").valid()){
+							var goRaiseUrl = _that.common.myurl + '/raise';
+							$.ajax({
+								url : goRaiseUrl,
+								data : $("#validation-form").serialize(),
+								type: "post",
+								dataType : 'json',
+								success: function( result ){
+									layer.msg(result.message);
+
+									if(result.success){
+										$( dialog_that ).dialog( "close" ); 
+
+										$.fn.zTree.init($("#treeDemo"), _that.menuTreeSetting);
+										var table = $('#example').DataTable();
+										table.ajax.url(_that.common.myurl + '/page').load();
+									}
+									
+								}
+							});
+						}
+					} 
+				},
+				{
+					text: "关闭",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						$( this ).dialog( "close" ); 
+					} 
+				}]
+		 });
+	},
+	
+	/**
+	 * 查看页面元素
+	 */
+	goView	:	function(){
+		var _that = this;
+		var elementID = _that.goCheck();
+		if( elementID != 0 ){
+			var goViewUrl = _that.common.myurl + '/view/' + elementID;
+			
+			$.ajax({
+				url : goViewUrl,
+				data : {},
+				type: "get",
+				dataType : 'json',
+				success: _that.goViewSuccess
+			});
+		}
+	},
+	
+	/**
+	 * 查看页面元素成功的回调函数
+	 */
+	goViewSuccess	:	function(result){
+		 $("#validation-form input").each(function(index){
+			 $(this).attr("disabled","disabled");
+		 });
+		 $("#validation-form textarea").each(function(index){
+			 $(this).attr("disabled","disabled");
+		 });
+		 
+		 var data = result.result;
+		 $("#elementName").val(data.elementName);
+         $("#sortNum").val(data.sortNum);
+		 $("#elementFunction").val(data.elementFunction);
+		 $("#elementStyle").val(data.elementStyle);
+		 $("#parentName").val(data.parentName);
+		 $("#parentID").val(data.parentID);
+		 $("#operationNames").val(data.operationNames);	
+		 $("#operationIDs").val(data.operationIDs);	
+		 $("#theNote").val(data.theNote);	
+		 $("#elementID").val(data.elementID);	
+		
+		$("#dialog-message").removeClass('hide').dialog({
+			modal : true,
+			title : "页面元素查看",
+			title_html : true,
+			width : 600,
+			buttons : [ {
+				text : "关闭",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					$(this).dialog("close");
+				}
+			} ]
+		});
+	},
+	
+	/**
+	 * 删除页面元素
+	 */
+	goErase	:	function(){
+		var _that = this;
+		var elementID = _that.goCheck();
+		if( elementID != 0 ){
+			var goEraseUrl = _that.common.myurl + '/erase/' + elementID;
+			
+			layer.confirm('确认删除页面元素！', {
+				  btn: ['删除','取消'], //按钮
+				  shade: false //不显示遮罩
+			}, function(){
+				$.ajax({
+					url : goEraseUrl,
+					data : {},
+					type: "get",
+					dataType : 'json',
+					success:function(result) {
+						layer.msg(result.message);
+						
+						$.fn.zTree.init($("#treeDemo"), _that.menuTreeSetting);
+						var table = $('#example').DataTable();
+						table.ajax.url(_that.common.myurl + '/page').load();
+					}
+				});
+			}, function(){
+			});
+		}
+	},
+	
+	/**
+	 * 修改页面元素
+	 */
+	goModify	:	function(){
+		var _that = this;
+		var elementID = _that.goCheck();
+		if( elementID != 0 ){
+			var goViewUrl = _that.common.myurl + '/view/' + elementID;
+			
+			$.ajax({
+				url : goViewUrl,
+				data : {},
+				type: "get",
+				dataType : 'json',
+				success: _that.goViewSuccessForModify
+			});
+		}
+	},
+	
+	/**
+	 * 修改页面元素——方法
+	 */
+	goViewSuccessForModify	:	function(result){
+		var _that = permission.org;
+		
+		var data = result.result;
+		 $("#elementName").val(data.elementName);
+         $("#sortNum").val(data.sortNum);
+		 $("#elementFunction").val(data.elementFunction);
+		 $("#elementStyle").val(data.elementStyle);
+		 $("#parentName").val(data.parentName);
+		 $("#parentID").val(data.parentID);
+		 $("#operationNames").val(data.operationNames);	
+		 $("#operationIDs").val(data.operationIDs);	
+		 $("#theNote").val(data.theNote);	
+		 $("#elementID").val(data.elementID);
+		
+		$("#validation-form input").each(function(index){
+			 $(this).removeAttr("disabled","");
+		 });
+		 $("#validation-form textarea").each(function(index){
+			 $(this).removeAttr("disabled","");
+		 });
+		 
+		 $("#parentName").delegate("","click",function (){
+			 _that.parentMenuTrees();
+		 });
+		 $("#operationNames").delegate("","click",function (){
+			 _that.operationTrees();
+		 });
+		 
+		 $("#dialog-message").removeClass('hide').dialog({
+			 modal: true,
+		     title: "修改页面元素",
+		     title_html: true,
+			 width:600,
+		     buttons: [ {
+					text: "确定",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						var dialog_that = this;
+						if($("#validation-form").valid()){
+							var goModifyUrl = _that.common.myurl + '/modify';
+							$.ajax({
+								url : goModifyUrl,
+								data : $("#validation-form").serialize(),
+								type: "post",
+								dataType : 'json',
+								success: function( result ){
+									layer.msg(result.message);
+
+									if(result.success){
+										$( dialog_that ).dialog( "close" ); 
+										
+										$.fn.zTree.init($("#treeDemo"), _that.menuTreeSetting);
+										var table = $('#example').DataTable();
+										table.ajax.url(_that.common.myurl + '/page').load();
+									}
+									
+								}
+							});
+						}
+					} 
+				},
+				{
+					text: "关闭",
+					"class" : "btn btn-primary btn-xs",
+					click: function() {
+						$( this ).dialog( "close" ); 
+					} 
+				}]
+		 });
+	},
+	
+	/**
+	 * 所属菜单树
+	 */
+	parentMenuTrees	:	function() {
+		var _that = this;
+		
+		$.fn.zTree.init($("#parentTree"), _that.parentTreeSetting);
+		$("#parentTree-message").removeClass('hide').dialog({
+			modal : true,
+			title : "所属菜单",
+			title_html : true,
+			width : 300,
+			buttons : [{
+				text : "确定",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					var zTree = $.fn.zTree.getZTreeObj("parentTree");
+					nodes = zTree.getCheckedNodes(true);
+					if( nodes.length == 0 ){
+						layer.msg("请选择所属菜单");
+					}
+					var parId = nodes[0].id;
+					var parName = nodes[0].name;
+					var parentType = nodes[0].stype;
+					
+					if( parentType == 'SYS_APP' ){
+						layer.msg("请选择菜单");
+					}
+					$("#parentID").val(parId);
+					$("#parentName").val(parName);
+					$(this).dialog("close");
+				}
+			}, {
+				text : "关闭",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					$(this).dialog("close");
+				}
+			}]
+		});
+	},
+	
+	/**
+	 * 操作信息
+	 */
+	operationTrees	:	function(){
+		var _that = this;
+		
+		var elementID = $("#elementID").val();
+		$.get( _that.common.operationUrl, {'elementID':elementID}, function(data) {
+			var  zNodesRaises = eval(data);
+			$.fn.zTree.init($("#operationTree"), _that.operationTreesSettings,zNodesRaises);
+		});
+		
+		var dialogTypes = $("#operationTree-message" ).removeClass('hide').dialog({
+			modal: true,
+			title: "操作",
+			title_html: true,
+			width:300,
+			buttons: [ 
+					{
+						text: "取消",
+						"class" : "btn btn-primary btn-xs",
+						click: function() {
+							$(dialogTypes).dialog("close");
+						} 
+					},
+					{
+						text: "确认",
+						"class" : "btn btn-primary btn-xs",
+						click: function() {
+							var zTree = $.fn.zTree.getZTreeObj("operationTree");
+							nodes = zTree.getCheckedNodes(true);
+							if(nodes.length>0){
+								var opeIds = "";
+								var opeNames ="";
+								for (var i=0, l=nodes.length; i<l; i++) {
+									opeIds = opeIds+ nodes[i].id+",";
+									opeNames = opeNames + nodes[i].name+",";
+								} 
+								opeIds = opeIds.substring(0, opeIds.length-1);
+								opeNames = opeNames.substring(0, opeNames.length-1);
+								$("#operationIDs").val(opeIds);
+								$("#operationNames").val(opeNames);
+								$(dialogTypes).dialog("close");
+							}else{
+								layer.msg("操作必选！");
+							}
+						} 
+					}
+    		]
+		});
+	}
 	
 }
