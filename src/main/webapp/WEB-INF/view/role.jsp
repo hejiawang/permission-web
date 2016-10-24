@@ -123,6 +123,7 @@
 									<button id="goModify" onclick="permission.role.goModify();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >修改</button>
 									<button id="goView" onclick="permission.role.goView();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >查看</button>
 									<button id="goErase" onclick="permission.role.goErase();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >删除</button>
+									<button id="goPermission" onclick="permission.role.goPermission();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >权限维护</button>
 								</div>
 						    </div>	
 							<div class="col-xs-12" style="background-color: #F0F0F0; padding-top: 10px; padding-bottom: 10px;">
@@ -172,6 +173,15 @@
 						</div>	
 						<input type="hidden" id="roleID" name="roleID"/>
 					</form>
+				</div>
+				
+				<div id="trees-message" class="hide">
+					<div class="zTreeDemoBackground left" style="float:left"  >
+						<ul id="resoureTree" class="ztree"></ul>
+					</div>
+					<div id="optr" class="zTreeDemoBackground right" style="float:left" >
+						<ul id="operationTree" class="ztree"></ul>
+					</div>
 				</div>
 				
 				<%@include file="resource/footer.jsp"%>

@@ -463,6 +463,19 @@ permission.role = {
 					} 
 				}]
 		 });
+	},
+	
+	/**
+	 * 权限维护
+	 * @author HeJiawang
+	 * @date   2016.10.24
+	 */
+	goPermission	:	function(){
+		var _that = this;
+		var roleID = _that.goCheck();
+		if( roleID != 0 ){
+			
+		}
 	}
 	
 }
