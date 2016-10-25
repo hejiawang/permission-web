@@ -73,4 +73,12 @@
 	    <b class="arrow"></b>
     </li>
     
+    <li id="userInfoData" class="">
+        <a href="userInfo">
+            <i class="menu-icon fa fa-tachometer"></i>
+            <span class="menu-text" style="font-family: 微软雅黑">用户管理</span>
+        </a>
+	    <b class="arrow"></b>
+    </li>
+    
 </ul><!-- /.nav-list -->

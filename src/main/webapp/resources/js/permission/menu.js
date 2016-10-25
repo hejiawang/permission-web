@@ -20,7 +20,7 @@ permission.menu = {
 	 */
 	common	:	{
 		/**
-		 * 机构url
+		 * 菜单url
 		 */
 		myurl	:	permission.domainUrl.baseDomain + '/menu',
 		
@@ -35,7 +35,7 @@ permission.menu = {
 		operationUrl	:	permission.domainUrl.baseDomain + '/operation/trees/menu',
 		
 		/**
-		 * 机构列表选中项
+		 * 菜单列表选中项
 		 */
 		tableRowDateObj	:	Object,
 		
