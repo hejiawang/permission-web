@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.wang.core.util.WebConstants;
 import com.wang.permission.web.util.SessionUtil;
 import com.wang.service.entity.permission.PermissionUserInfoEntity;
 import com.wang.service.param.permission.PermissionResourceParam;
@@ -54,9 +55,9 @@ public class PermissionResourceController {
 	 * @author HeJiawang
 	 * @date   2016.10.26
 	 */
-	@RequestMapping(value="/trees",method = RequestMethod.POST,produces="text/plain;charset=UTF-8")
+	@RequestMapping(value="/trees",method = RequestMethod.GET,produces="text/plain;charset=UTF-8")
 	@ResponseBody
-	public String queryResourceForTree(Integer id,String parentType, HttpServletRequest request){
+	public String queryResourceForTree(Integer id, String parentType, HttpServletRequest request){
 		StringBuffer sb = new StringBuffer();
 		
 		try{
@@ -74,7 +75,7 @@ public class PermissionResourceController {
 			PermissionResourceParam resource = permissionResourceService.getResourceByID(id = id==null?0:id).getResult();
 			Integer parID = 0;
 			if(resource != null){
-				parID = resource.getSelfID();
+				parID = resource.getResourceID();
 			}
 			if(parentType == null || parentType.equals("")){
 				parentType = "SYS_APP";
@@ -82,14 +83,30 @@ public class PermissionResourceController {
 			
 			List<PermissionResourceParam> listApp = new ArrayList<PermissionResourceParam>();
 			List<PermissionResourceParam> listM = new ArrayList<PermissionResourceParam>();
-			List<PermissionResourceParam> elementList = new ArrayList<PermissionResourceParam>();
+			List<PermissionResourceParam> listE = new ArrayList<PermissionResourceParam>();
+			if( parID == 0 ){	//列出应用系统APP
+				if( roleIDList.contains(WebConstants.permissionAdminID) ){	//登陆者为系统超级管理员，列出所有的APP信息
+					listApp = permissionResourceService.getResourceForApp().getResult();
+				} else {	//根据登陆者的角色列出该角色权限允许的APP信息
+					
+				}
+			} else {	//列出菜单或页面元素
+				if( roleIDList.contains(WebConstants.permissionAdminID) ){	//登陆者为系统超级管理员，列出所有的菜单或页面元素信息
+					listM = permissionResourceService.getResourceForMenuElement(parID).getResult();
+					listE = permissionResourceService.getResourceForElement(parID).getResult();
+				} else {	//根据登陆者的角色列出该角色权限允许的菜单或页面元素信息
+					
+				}
+			}
+			
+			
 			/*if(parID.intValue() == 0){
 				listApp = sysRoleRoleService.findResourceApp(parID,accountID,roleIDlist);//所有系统资源
 			}else{
 				listM = sysRoleRoleService.findResourceMenu(parID,parentType,accountID,roleIDlist);
 				elementList = sysRoleRoleService.findResourceEle(parID,parentType,accountID,roleIDlist);
 			}*/
-			listM.addAll(elementList);
+			listM.addAll(listE);
 			listApp.addAll(listM);
 			PermissionResourceParam res;
 			sb.append("[");

@@ -21,6 +21,8 @@ permission.role = {
 		 */
 		myurl	:	permission.domainUrl.baseDomain + '/role',
 		
+		resourceTreeUrl	:	permission.domainUrl.baseDomain + '/resource/trees',
+		
 		/**
 		 * 角色列表选中项
 		 */
@@ -83,6 +85,44 @@ permission.role = {
 		}),
 	},
 	
+	/**
+	 * 资源树参数
+	 */
+	resourceSetting : {
+		view: {
+			selectedMulti: false
+		},
+		async: {
+			enable : true,
+			url : permission.domainUrl.baseDomain + '/resource/trees',
+			dataType : "text",
+			type : "get",
+			autoParam : ["id","parentType"],
+		},
+		 callback: {
+			beforeClick : function(treeId, treeNode){
+				permission.role.resourceTreeBeforeClick(treeId, treeNode);
+			} 
+		} 
+     },
+     
+     /**
+      * 操作树信息
+      */
+     OperationSetting : {
+		view: {
+			selectedMulti: false, 
+		},
+		check: {
+			enable: true
+		},
+		callback: {
+			onCheck: function(event, treeId, treeNode){
+				permission.role.onCheckOperationTree(event, treeId, treeNode);
+			},
+		} 
+	},
+     
 	/**
 	 * 数据初始化
 	 */
@@ -474,8 +514,83 @@ permission.role = {
 		var _that = this;
 		var roleID = _that.goCheck();
 		if( roleID != 0 ){
+			$("#optr").addClass('hide');
+		    $.fn.zTree.init($("#resoureTree"), permission.role.resourceSetting);
 			
+		    var dialog = $("#trees-message").removeClass('hide').dialog({
+				modal: true,
+				title: "权限维护",
+				title_html: true,
+				width:400,
+				buttons: [ 
+					{
+						text: "取消",
+						"class" : "btn btn-xs",
+						click: function() {
+							$( this ).dialog( "close" ); 
+						} 
+					},{
+						text: "授权",
+						"class" : "btn btn-primary btn-xs",
+						click: function() {
+							
+							var zTree = $.fn.zTree.getZTreeObj("operationTree");
+							nodes = zTree.getCheckedNodes(true);
+							var opeIds = "";
+							for (var i=0, l=nodes.length; i<l; i++) {
+								opeIds = opeIds+ nodes[i].id+",";
+							} 
+							opeIds = opeIds.substring(0, opeIds.length-1);
+							var rTree = $.fn.zTree.getZTreeObj("resoureTree");
+							rnodes = rTree.getSelectedNodes(true);
+							var resourceID = rnodes[0].id;
+							$.post("<%=basePath%>sysbase/role/raiseP",{'roleID':id,'resourceID':resourceID,'permissionID':opeIds}, function(data) {
+								if(data.result>0){
+									alert("授权成功！");
+								}else{
+									alert("授权失败！");
+								}
+							}); 
+						}
+					}]
+			});
 		}
-	}
+	},
+	
+	/**
+	 * app、菜单、页面元素树点击事件
+	 * @param treeId
+	 * @param treeNode
+	 */
+	resourceTreeBeforeClick	:	function(treeId, treeNode){
+		var roleID = _that.goCheck();
+		var resourceID = treeNode.id;
+		$("#optr").removeClass('hide');
+		$.ajax({
+			url : permission.domainUrl.baseDomain + '/operation/trees/resource',
+			data : {"roleID":roleID,"resourceID":resourceID},
+			type: "post",
+			dataType : 'json',
+			success: function( data ){
+				$.fn.zTree.init($("#operationTree"), permission.role.OperationSetting, eval(data));
+			}
+		});
+	},
+	
+	/**
+	 * 操作树选中事件</br>
+	 * 当选中删除、修改、授权时，一定会选中可用
+	 */
+	onCheckOperationTree	:	function(event, treeId, treeNode){
+		var zTree = $.fn.zTree.getZTreeObj("operationTree");
+		if(treeNode.name == "可用" && treeNode.checked == false){
+			zTree.checkAllNodes(false);
+		}else if(treeNode.name != "可用" && treeNode.name != "授权" && treeNode.checked == true){
+			var node = zTree.getNodeByParam("name","可用");
+			if(node!=null){
+				zTree.checkNode(node, true);
+			}
+		}
+	},
 	
 }

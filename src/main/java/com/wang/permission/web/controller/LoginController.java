@@ -22,7 +22,7 @@ import com.wang.core.util.DomainUrlUtil;
 import com.wang.core.util.RegExpValidator;
 import com.wang.permission.web.util.SessionUtil;
 import com.wang.service.entity.permission.PermissionUserInfoEntity;
-import com.wang.service.service.permission.LoginService;
+import com.wang.service.service.permission.PermissionLoginService;
 
 /**
  * 登录Controller
@@ -38,7 +38,7 @@ public class LoginController extends BaseController {
 	private final String LOGIN = "login";
 	
 	@Autowired
-	private LoginService loginService;
+	private PermissionLoginService loginService;
 	
 	/**
 	 * 跳转登录
@@ -71,19 +71,17 @@ public class LoginController extends BaseController {
 			
 			PermissionUserInfoEntity userInfo  = new PermissionUserInfoEntity();
 			boolean isGetUser  = false;
-			if(RegExpValidator.isPhoneNum(loginName)){
-				ServiceResult<PermissionUserInfoEntity> serviceResult = loginService.doLogin(loginName, password, null);
-				if (!serviceResult.getSuccess()){
-					model.addAttribute("loginName", loginName);
-					model.addAttribute("message", serviceResult.getMessage());
-					map.put("state", "error");
-					map.put("info", "账号或密码错误!");
-					return map;
-				}
-				userInfo = serviceResult.getResult();
-				if (userInfo == null){
-					isGetUser = true;
-				}
+			ServiceResult<PermissionUserInfoEntity> serviceResult = loginService.doLogin(loginName, password, null);
+			if (!serviceResult.getSuccess()){
+				model.addAttribute("loginName", loginName);
+				model.addAttribute("message", serviceResult.getMessage());
+				map.put("state", "error");
+				map.put("info", "账号或密码错误!");
+				return map;
+			}
+			userInfo = serviceResult.getResult();
+			if (userInfo == null){
+				isGetUser = true;
 			}
 			
 			//如果获取用户信息为null则登录失败
@@ -139,11 +137,6 @@ public class LoginController extends BaseController {
 		ServiceResult<Void> result = new ServiceResult<>();
 		if (StringUtils.isBlank(username)) {
 			result.setMessage("登录账号不能为空");
-			result.setSuccess(false);
-			return result;
-		}
-		if (!RegExpValidator.isLoginNum(username)) {
-			result.setMessage("请输入正确的登录账号");
 			result.setSuccess(false);
 			return result;
 		}
