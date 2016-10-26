@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.wang.core.util.ClientIPUtils;
 import com.wang.core.util.CookieHelper;
 import com.wang.core.util.SaltUtil;
+import com.wang.core.util.WebConstants;
 import com.wang.service.entity.permission.PermissionUserInfoEntity;
 
 /**
