@@ -21,8 +21,8 @@ import com.wang.core.ServiceResult;
 import com.wang.core.util.DomainUrlUtil;
 import com.wang.core.util.RegExpValidator;
 import com.wang.permission.web.util.SessionUtil;
-import com.wang.service.entity.user.UserEntity;
-import com.wang.service.service.user.LoginService;
+import com.wang.service.entity.permission.PermissionUserInfoEntity;
+import com.wang.service.service.permission.LoginService;
 
 /**
  * 登录Controller
@@ -69,10 +69,10 @@ public class LoginController extends BaseController {
 				return map;
 			}
 			
-			UserEntity user  = new UserEntity();
+			PermissionUserInfoEntity userInfo  = new PermissionUserInfoEntity();
 			boolean isGetUser  = false;
 			if(RegExpValidator.isPhoneNum(loginName)){
-				ServiceResult<UserEntity> serviceResult = loginService.doLogin(loginName, password, null);
+				ServiceResult<PermissionUserInfoEntity> serviceResult = loginService.doLogin(loginName, password, null);
 				if (!serviceResult.getSuccess()){
 					model.addAttribute("loginName", loginName);
 					model.addAttribute("message", serviceResult.getMessage());
@@ -80,8 +80,8 @@ public class LoginController extends BaseController {
 					map.put("info", "账号或密码错误!");
 					return map;
 				}
-				user = serviceResult.getResult();
-				if (user == null){
+				userInfo = serviceResult.getResult();
+				if (userInfo == null){
 					isGetUser = true;
 				}
 			}
@@ -96,7 +96,7 @@ public class LoginController extends BaseController {
 			}
 			
 			//把用户信息加载到session中
-			SessionUtil.writeUserToSession(request, user);
+			SessionUtil.writeUserToSession(request, userInfo);
 			//加载用户权限
 			//loadStationInfoToFrontUser(request, frontUser);
 			//记录登录日志
@@ -107,7 +107,7 @@ public class LoginController extends BaseController {
 			map.put("state", "ok");
 			map.put("info", "正常登陆");
 			
-			logger.info(user.getLoginName() + " 登录 ");
+			logger.info(userInfo.getLoginName() + " 登录 ");
 			return map;
 		}else{
 			map.put("state", "error");

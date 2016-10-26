@@ -6,7 +6,6 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.wang.core.bean.BehaviorBean;
 import com.wang.core.util.ClientIPUtils;
 import com.wang.permission.web.util.SessionUtil;
-import com.wang.service.entity.user.UserEntity;
+import com.wang.service.entity.permission.PermissionUserInfoEntity;
 
 /**
  * 用户行为采集拦截器，利用HornetQ
@@ -31,7 +30,7 @@ public class HornetQInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
     	try {
-            UserEntity user = SessionUtil.getFrontUserByRequest(request);
+    		PermissionUserInfoEntity user = SessionUtil.getFrontUserByRequest(request);
             
             // 向HornetQ发送用户动作，排除掉资源文件的访问
             String url = request.getRequestURL().toString();			// 访问的URL

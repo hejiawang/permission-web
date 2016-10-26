@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.wang.core.util.ClientIPUtils;
 import com.wang.core.util.CookieHelper;
 import com.wang.core.util.SaltUtil;
-import com.wang.service.entity.user.UserEntity;
+import com.wang.service.entity.permission.PermissionUserInfoEntity;
 
 /**
  * session工具类
@@ -48,7 +48,7 @@ public class SessionUtil {
 	/**
 	 * 从request中获取用户信息
 	 */
-	public static UserEntity getFrontUserByRequest(HttpServletRequest request) {
+	public static PermissionUserInfoEntity getFrontUserByRequest(HttpServletRequest request) {
 		return getFrontUserBySessionId(request);
 	}
 	
@@ -85,37 +85,37 @@ public class SessionUtil {
 	/**
 	 * 从sessionId中获取用户信息
 	 */
-	public static UserEntity getFrontUserBySessionId(HttpServletRequest request) {
+	public static PermissionUserInfoEntity getFrontUserBySessionId(HttpServletRequest request) {
 
 		try {
 			String sessionId = getSessionId(request);
 			String key = WebConstants.NAMESPACE_PERMISSION_WEB_SESSION + sessionId;
 			HttpSession session = request.getSession();
-			UserEntity frontUser = (UserEntity)session.getAttribute(key);
+			PermissionUserInfoEntity frontUser = (PermissionUserInfoEntity)session.getAttribute(key);
 			if (frontUser == null)
-				return new UserEntity();
+				return new PermissionUserInfoEntity();
 			if (frontUser != null ) {
 				logger.debug("从session中取[{}]用户没有登录",key);
 			}
 			return  frontUser;
 		} catch (Exception e) {
-			logger.error("获取从session中UserEntity异常", e);
-			return new UserEntity();
+			logger.error("获取从session中PermissionUserInfoEntity异常", e);
+			return new PermissionUserInfoEntity();
 		}
 	}
 	
 	/**
 	 * 缓存用户信息至session
 	 */
-	public static UserEntity writeUserToSession(HttpServletRequest request, UserEntity user) {
+	public static PermissionUserInfoEntity writeUserToSession(HttpServletRequest request, PermissionUserInfoEntity user) {
 
 		try {
 			if (request == null || user == null) {
-				return new UserEntity();
+				return new PermissionUserInfoEntity();
 			}
 			String sessionId = getSessionId(request);
 			if (user == null || sessionId == null) {
-				return new UserEntity();
+				return new PermissionUserInfoEntity();
 			}
 			final String key = WebConstants.NAMESPACE_PERMISSION_WEB_SESSION + sessionId;
 			HttpSession session = request.getSession();

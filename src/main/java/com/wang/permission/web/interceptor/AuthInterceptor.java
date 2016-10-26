@@ -12,7 +12,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.wang.core.util.DomainUrlUtil;
 import com.wang.permission.web.util.SessionUtil;
-import com.wang.service.entity.user.UserEntity;
+import com.wang.service.entity.permission.PermissionUserInfoEntity;
 
 /**
  * 权限拦截器
@@ -42,11 +42,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 				return true;
 			}
 
-			UserEntity user = SessionUtil.getFrontUserByRequest(request);
+			PermissionUserInfoEntity user = SessionUtil.getFrontUserByRequest(request);
 			if( null == user ){
 				response.sendRedirect(DomainUrlUtil.BASEURL_DOMAIN + "/login");
 				return false;
-			} else if ( user.getID() == null ) {
+			} else if ( user.getUserID() == null ) {
 				response.sendRedirect(DomainUrlUtil.BASEURL_DOMAIN + "/login");
 				return false;
 			}
