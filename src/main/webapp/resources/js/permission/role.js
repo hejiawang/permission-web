@@ -544,13 +544,16 @@ permission.role = {
 							var rTree = $.fn.zTree.getZTreeObj("resoureTree");
 							rnodes = rTree.getSelectedNodes(true);
 							var resourceID = rnodes[0].id;
-							$.post("<%=basePath%>sysbase/role/raiseP",{'roleID':id,'resourceID':resourceID,'permissionID':opeIds}, function(data) {
-								if(data.result>0){
-									alert("授权成功！");
-								}else{
-									alert("授权失败！");
+							
+							$.ajax({
+								url : permission.domainUrl.baseDomain + '/role/raisePermission',
+								data : {"roleID":roleID,"resourceID":resourceID, 'permissionIDs':opeIds},
+								type: "post",
+								dataType : 'json',
+								success: function( data ){
+									alert(data.message);
 								}
-							}); 
+							});
 						}
 					}]
 			});
@@ -563,14 +566,15 @@ permission.role = {
 	 * @param treeNode
 	 */
 	resourceTreeBeforeClick	:	function(treeId, treeNode){
+		var _that = this;
 		var roleID = _that.goCheck();
 		var resourceID = treeNode.id;
 		$("#optr").removeClass('hide');
 		$.ajax({
 			url : permission.domainUrl.baseDomain + '/operation/trees/resource',
 			data : {"roleID":roleID,"resourceID":resourceID},
-			type: "post",
-			dataType : 'json',
+			type: "get",
+			dataType : 'text',
 			success: function( data ){
 				$.fn.zTree.init($("#operationTree"), permission.role.OperationSetting, eval(data));
 			}
@@ -579,7 +583,7 @@ permission.role = {
 	
 	/**
 	 * 操作树选中事件</br>
-	 * 当选中删除、修改、授权时，一定会选中可用
+	 * 当选中删除、修改时，一定会选中可用
 	 */
 	onCheckOperationTree	:	function(event, treeId, treeNode){
 		var zTree = $.fn.zTree.getZTreeObj("operationTree");

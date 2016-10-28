@@ -151,4 +151,24 @@ public class PermissionRoleController extends BaseController {
 		return result;
 	}
 	
+	/**
+	 * 为角色分配权限
+	 * @param role 角色信息
+	 * @return ServiceResult
+	 * @author HeJiawang
+	 * @date   2016.10.28
+	 */
+	@RequestMapping(value="/raisePermission",method=RequestMethod.POST)
+	@ResponseBody
+	public ServiceResult<Void> raisePermission( PermissionRoleParam role ){
+		ServiceResult<Void> result = null;
+		try {
+			result = permissionRoleService.raisePermission(role);
+		} catch (Exception e) {
+			logger.error("异常发生在"+this.getClass().getName()+"类的raisePermission方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		
+		return result;
+	}
+	
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wang.service.entity.permission.PermissionOperationEntity;
 import com.wang.service.entity.permission.PermissionResourceEntity;
+import com.wang.service.param.permission.PermissionPermissionOperationParam;
 import com.wang.service.service.permission.PermissionOperationService;
 import com.wang.service.service.permission.PermissionResourceService;
 
@@ -20,6 +21,7 @@ import com.wang.service.service.permission.PermissionResourceService;
  * 操作Controller
  * 
  * @author HeJiawang
+ * @param <PermissionpPermissionOperationParam>
  * @date   2016.10.17
  */
 @Controller
@@ -141,6 +143,46 @@ public class PermissionOperationController extends BaseController {
 			logger.debug("操作树JSON====="+sb.toString());
 		}catch(Exception e){
 			logger.info("异常发生在"+this.getClass().getName()+"类的queryMenuOperationForTree方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * 获取资源对应的操作树
+	 * @param roleID 角色ID
+	 * @param resourceID 资源ID
+	 * @return 操作树
+	 * @author HeJiawang
+	 * @date   2016.10.28
+	 */
+	@RequestMapping(value="/trees/resource",method = RequestMethod.GET,produces="text/plain;charset=UTF-8")
+	public @ResponseBody String queryResourceOperationForTree(Integer roleID, Integer resourceID){
+		StringBuffer sb=new StringBuffer();
+		try {
+			List<Integer> list = permissionOperationService.getOperationByRoleIDAndResourceID(roleID,resourceID).getResult();//角色所有的资源的操作权限ID
+			List<PermissionPermissionOperationParam> listp = permissionOperationService.getOperationAndPermissionByResourceID(resourceID).getResult();
+			PermissionPermissionOperationParam srp; 
+			sb.append("[");
+			for (int i = 0; i < listp.size(); i++) {
+				srp = listp.get(i);
+				if(i==(listp.size()-1)){
+					if(list.contains(srp.getPermissionID())){
+						sb.append("{id:"+srp.getPermissionID()+",opid:\""+srp.getOperationID()+"\",name:\""+srp.getOperationName()+"\",checked:true}");
+					}else{
+						sb.append("{id:"+srp.getPermissionID()+",opid:\""+srp.getOperationID()+"\",name:\""+srp.getOperationName()+"\"}");
+					}
+				}else{
+					if(list.contains(srp.getPermissionID())){
+						sb.append("{id:"+srp.getPermissionID()+",opid:\""+srp.getOperationID()+"\",name:\""+srp.getOperationName()+"\",checked:true},");
+					}else{
+						sb.append("{id:"+srp.getPermissionID()+",opid:\""+srp.getOperationID()+"\",name:\""+srp.getOperationName()+"\"},");
+					}
+				}
+			}
+			sb.append("]");
+			logger.debug("操作树JSON====="+sb.toString());
+		} catch (Exception e){
+			logger.info("异常发生在"+this.getClass().getName()+"类的queryResourceOperationForTree方法，异常原因是："+e.getMessage(), e.fillInStackTrace());	
 		}
 		return sb.toString();
 	}
