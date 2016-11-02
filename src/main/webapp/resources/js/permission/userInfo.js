@@ -39,7 +39,7 @@ permission.userInfo = {
 	},
 	
 	/**
-	 * 初始化机构表单
+	 * 初始化用户表单
 	 */
 	initTable	:	function(){
 		var _that = this;
@@ -63,12 +63,6 @@ permission.userInfo = {
 			        "render":function ( data, type, full, meta ) {
 	                return '<input type="checkbox" name="selectID" value="'+data+'"/>';
 	              },	 
-	            },
-				{   
-	            	"title":"",
-	            	"data": "accountID",
-	            	"orderable": false,
-	            	"visible": false
 	            },
 	            {   
 	            	"title":"姓名",
@@ -120,7 +114,7 @@ permission.userInfo = {
 	},
 	
 	/**
-	 * 为机构表单绑定点击事件
+	 * 为表单绑定点击事件
 	 */
 	getTableRowData	:	function(){
 		var _that = this;
@@ -131,7 +125,7 @@ permission.userInfo = {
 	},
 	
 	/**
-	 * 为机构表单复选框绑定单选
+	 * 为表单复选框绑定单选
 	 */
 	singleSelectFun	:	function(){
 		var _that = this;
@@ -160,7 +154,7 @@ permission.userInfo = {
 	}, 
 
 	/**
-	 * 为机构表单绑定翻页事件
+	 * 为表单绑定翻页事件
 	 */
 	pageLengthChangeFun	:	function(){
 		var _that = this;
@@ -170,7 +164,7 @@ permission.userInfo = {
 	},
 	
 	/**
-	 * 重新加载机构表单
+	 * 重新加载表单
 	 */
 	reloadDatatables	:	function(){
 		var _that = this;
@@ -179,7 +173,7 @@ permission.userInfo = {
 	},
 	
 	/**
-	 * 判断是否选中组织列表数据
+	 * 判断是否选中列表数据
 	 */
 	goCheck	:	function(){
 		var ids = document.getElementsByName("selectID");
@@ -228,4 +222,331 @@ permission.userInfo = {
 		table.ajax.url( _that.common.myurl+"/page?userName=" + userName ).load();
 	},
 	
+	/**
+	 * 新增用户页面——提交
+	 */
+	submitUserInfo	:	function(){
+		var able = $("#able").val();
+		if( able == 'raise' ){	//新增用户
+			
+		} else {  //able == 'modify'  修改用户
+			
+		} 
+	},
+	
+	/**
+	 * 新增用户页面——返回
+	 */
+	goBack	:	function(){
+		$("#saveForm").hide();
+		$("#selectAll").show();
+	},
+	
+	/**
+	 * 新增用户页面——重置用户信息
+	 */
+	resetUserInfo	:	function(){
+		$("#userCode").val("");
+ 		$("#userName").val("");
+ 		$("#userTel").val("");
+ 		$("#userEmail").val("");
+ 		$("#userBirthday").val("");
+ 		$("#userNation").val("");
+ 		//$("#photoFile").val("");
+ 		$("#theNote").val("");
+ 		$("#sortNum").val("");
+ 		$("#loginName").val("");
+ 		$("#passWord").val("").removeAttr("placeholder");
+ 		$("#passWordR").val("").removeAttr("placeholder");
+ 		
+ 		$("#orgName").val("");
+		$("#orgID").val("");
+		$("#postNames").val("");
+		$("#postIDs").val("");
+		$("#rankNames").val("");
+		$("#rankIDs").val("");
+		$("#roleNames").val("");
+		$("#roleIDs").val("");
+		permission.userInfo.photoReset();
+	},
+	
+	/**
+	 * 清空验证提示信息
+	 */
+	clearValidation	:	function(){
+		$(".form-group").removeClass("has-error");
+		$(".help-block").css("display","none");
+	},
+	
+	/**
+	 * 重置上传头像
+	 */
+	clearDropzone	:	function(){
+		//注意这种写法，获得dropzone的对象，不用再init里设置
+		var myDropzone = Dropzone.forElement("#dzform");
+		myDropzone.removeAllFiles();
+	},
+	
+	/**
+	 * 上传头像可用
+	 */
+	enableDropzone	:	function(){
+		var myDropzone = Dropzone.forElement("#dzform");
+		myDropzone.enable() ;
+	},
+	
+	/**
+	 * 上传头像不可用
+	 */
+	disableDropzone	:	function(){
+		var myDropzone = Dropzone.forElement("#dzform");
+		myDropzone.disable() ;
+	},
+	
+	/**
+	 * 清空头像图片
+	 */
+	photoReset	:	function(){
+		var myDropzone = Dropzone.forElement("#dzform");
+		myDropzone.removeAllFiles() ;
+	},
+	
+	/**
+	 * 机构树参数
+	 */
+	orgTreeSetting	:	{
+		view : {
+			dblClickExpand : false
+		},
+		check : {
+			enable : true,
+			chkStyle : "radio",
+			radioType : "all"
+		},
+		data : {
+			simpleData : {
+				enable : true
+			}
+		},
+		async : {
+			enable : true,
+			url : permission.domainUrl.baseDomain + '/org/trees',
+			dataType : "text",
+			type : "get",
+			autoParam : [ "id" ]
+		}
+	},
+	
+	/**
+	 * 
+	 */
+	OrgTrees	:	function(){
+		var _that = this;
+		
+		$.fn.zTree.init($("#orgTree"), _that.orgTreeSetting);
+		$("#orgTree-message").removeClass('hide').dialog({
+			modal : true,
+			title : "所属机构",
+			title_html : true,
+			width : 300,
+			buttons : [{
+				text : "确定",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					var zTree = $.fn.zTree.getZTreeObj("orgTree");
+					nodes = zTree.getCheckedNodes(true);
+					if( nodes.length == 0 ){
+						layer.msg("请选择所属机构");
+					}
+					var parId = nodes[0].id;
+					var parName = nodes[0].name;
+					$("#orgID").val(parId);
+					$("#orgName").val(parName);
+					$(this).dialog("close");
+				}
+			}, {
+				text : "关闭",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					$(this).dialog("close");
+				}
+			}]
+		});
+	},
+	
+	/**
+	 * 岗位树参数
+	 */
+	postTreeSetting : {
+		view: {
+			selectedMulti: false, 
+		},
+		check: {
+			enable: true
+		}
+	},
+	
+	/**
+	 * 岗位树
+	 */
+	postTrees	:	function(){
+		$.ajax({
+			url : permission.domainUrl.baseDomain + '/post/trees',
+			data : {},
+			type: "get",
+			dataType : 'text',
+			success: function( data ){
+				$.fn.zTree.init($("#postTree"), permission.userInfo.postTreeSetting, eval(data));
+			}
+		});
+		
+		$("#postTree-message").removeClass('hide').dialog({
+			modal : true,
+			title : "岗位",
+			title_html : true,
+			width : 300,
+			buttons : [{
+				text : "确定",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					var zTree = $.fn.zTree.getZTreeObj("postTree");
+					nodes = zTree.getCheckedNodes(true);
+					if( nodes.length == 0 ){
+						layer.msg("请选择岗位");
+					}
+					
+					var postIDs = "";
+					for (var i=0, l=nodes.length; i<l; i++) {
+						postIDs = postIDs+ nodes[i].id+",";
+					} 
+					postIDs = postIDs.substring(0, postIDs.length-1);
+					$("#postIDs").val(postIDs);
+					
+					var postNames = "";
+					for (var i=0, l=nodes.length; i<l; i++) {
+						postNames = postNames+ nodes[i].name+",";
+					} 
+					postNames = postNames.substring(0, postNames.length-1);
+					$("#postNames").val(postNames);
+					
+					$(this).dialog("close");
+				}
+			}, {
+				text : "关闭",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					$(this).dialog("close");
+				}
+			}]
+		});
+	},
+	
+	/**
+	 * 职级树参数
+	 */
+	rankTreeSetting	:	{
+		
+		view: {
+			dblClickExpand: false
+		},
+		check: {
+			enable: true,
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		},
+		async: {
+			enable: true,
+			url : permission.domainUrl.baseDomain + '/rank/trees',
+			dataType: "text",
+			type:"post",
+			autoParam: ["id"]
+		}, 
+		/*callback: {
+			onAsyncSuccess: onAsyncSuccessTitleTree,
+		},*/
+	},
+	
+	/**
+	 * 职级树
+	 */
+	rankTrees	:	function(){
+		var _that = this;
+		
+		$.fn.zTree.init($("#rankTree"), _that.rankTreeSetting);
+		$("#rankTree-message").removeClass('hide').dialog({
+			modal : true,
+			title : "职级",
+			title_html : true,
+			width : 300,
+			buttons : [{
+				text : "确定",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					var zTree = $.fn.zTree.getZTreeObj("rankTree");
+					nodes = zTree.getCheckedNodes(true);
+					if( nodes.length == 0 ){
+						layer.msg("请选择职级");
+					}
+					/*var parId = nodes[0].id;
+					var parName = nodes[0].name;
+					$("#rankIDs").val(parId);
+					$("#rankNames").val(parName);*/
+					$(this).dialog("close");
+				}
+			}, {
+				text : "关闭",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					$(this).dialog("close");
+				}
+			}]
+		});
+	},
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * 新增用户
+	 */
+	goRaise	:	function(){
+		permission.userInfo.resetUserInfo();
+		permission.userInfo.clearDropzone();
+		permission.userInfo.enableDropzone();
+		permission.userInfo.clearValidation();
+		
+		$("#orgName").delegate("","click",function (){
+			permission.userInfo.OrgTrees();
+		});
+		$("#postNames").delegate("","click",function (){
+			permission.userInfo.postTrees();
+		});
+		$("#rankNames").delegate("","click",function (){
+			permission.userInfo.rankTrees();
+		});
+		$("#roleNames").delegate("","click",function (){
+			permission.userInfo.roleTrees();
+		});
+		
+		$("#update").val("raise");
+ 		$("#selectAll").hide();
+ 		$("#saveForm").show();
+	},
 }

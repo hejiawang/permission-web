@@ -1,5 +1,6 @@
 package com.wang.permission.web.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -149,6 +150,36 @@ public class PermissionPostController extends BaseController {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 获取岗位树</br>
+	 * 即、全部岗位
+	 * @return 岗位树
+	 * @author HeJiawang
+	 * @date   2016.11.02
+	 */
+	@RequestMapping(value="/trees",method = RequestMethod.GET,produces="text/plain;charset=UTF-8")
+	public @ResponseBody String queryPostForTree(){
+		StringBuffer sb=new StringBuffer();
+		try {
+			List<PermissionPostParam> listp = permissionPostService.queryPostForTree().getResult();
+			PermissionPostParam srp; 
+			sb.append("[");
+			for (int i = 0; i < listp.size(); i++) {
+				srp = listp.get(i);
+				if(i==(listp.size()-1)){
+					sb.append("{id:"+srp.getPostID()+"\",name:\""+srp.getPostName()+"\"}");
+				}else{
+					sb.append("{id:"+srp.getPostID()+"\",name:\""+srp.getPostName()+"\"},");
+				}
+			}
+			sb.append("]");
+			logger.debug("操作树JSON====="+sb.toString());
+		} catch (Exception e){
+			logger.info("异常发生在"+this.getClass().getName()+"类的queryPostForTree方法，异常原因是："+e.getMessage(), e.fillInStackTrace());	
+		}
+		return sb.toString();
 	}
 	
 }

@@ -48,7 +48,7 @@ public class PermissionResourceController {
 	private PermissionResourceService permissionResourceService;
 	
 	/**
-	 * 根据登录角色,使应用系统、菜单、页面以资源的形式构成树
+	 * 根据登录角色,使应用系统、菜单、页面元素以资源的形式构成树
 	 * @param id 树节点——resourceID
 	 * @param parentType 树节点——父资源类型
 	 * @return 资源树
@@ -87,25 +87,19 @@ public class PermissionResourceController {
 			if( parID == 0 ){	//列出应用系统APP
 				if( roleIDList.contains(WebConstants.permissionAdminID) ){	//登陆者为系统超级管理员，列出所有的APP信息
 					listApp = permissionResourceService.getResourceForApp().getResult();
-				} else {	//根据登陆者的角色列出该角色权限允许的APP信息
-					
+				} else {	//根据登陆者的角色,列出该角色权限允许授权的APP信息
+					listApp = permissionResourceService.getResourceForAppByUserID(userID).getResult();
 				}
 			} else {	//列出菜单或页面元素
 				if( roleIDList.contains(WebConstants.permissionAdminID) ){	//登陆者为系统超级管理员，列出所有的菜单或页面元素信息
 					listM = permissionResourceService.getResourceForMenuElement(parID).getResult();
 					listE = permissionResourceService.getResourceForElement(parID).getResult();
-				} else {	//根据登陆者的角色列出该角色权限允许的菜单或页面元素信息
-					
+				} else {	//根据登陆者的角色列出该角色权限允许授权的菜单或页面元素信息
+					listM = permissionResourceService.getResourceForMenuElementByUserID(userID, parID).getResult();
+					listE = permissionResourceService.getResourceForElementByUserID(userID, parID).getResult();
 				}
 			}
 			
-			
-			/*if(parID.intValue() == 0){
-				listApp = sysRoleRoleService.findResourceApp(parID,accountID,roleIDlist);//所有系统资源
-			}else{
-				listM = sysRoleRoleService.findResourceMenu(parID,parentType,accountID,roleIDlist);
-				elementList = sysRoleRoleService.findResourceEle(parID,parentType,accountID,roleIDlist);
-			}*/
 			listM.addAll(listE);
 			listApp.addAll(listM);
 			PermissionResourceParam res;

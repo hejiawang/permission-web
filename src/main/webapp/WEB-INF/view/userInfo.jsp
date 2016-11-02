@@ -134,7 +134,7 @@
 								</div>
 						    </div>	
 							<div class="col-xs-12" style="background-color: #F0F0F0; padding-top: 10px; padding-bottom: 10px;">
-							    <input class="input-sm" id="userNameSerch"  placeholder="查询岗位名称"   type="text">
+							    <input class="input-sm" id="userNameSerch"  placeholder="查询用户名称"   type="text">
 						        <input class="btn btn-info" type="button" value="检索" id="goSearch" onclick="permission.userInfo.goSearch();" style="margin-left: 20px;"/>	
 						        <input class="btn btn-info" type="button" value="清空" id="goReset" onclick="permission.userInfo.goReset();" style="margin-left: 20px;"/>
 								<div class="table-responsive" style="margin-top: 10px;">
@@ -146,7 +146,7 @@
 						</div>
 						
 						<!-- 新增用户页 -->
-						<div  id="saveForm">
+						<div  id="saveForm" style="display:none">
 							<div class="col-xs-12 col-sm-12" style="border:#ccc solid 1px; height: auto;">
 									<div class="widget-box"  style="border:none;">
 										<div class="widget-header">
@@ -161,7 +161,7 @@
 													</label>	
 													<div class="col-xs-12 col-sm-12">
 															<div style="max-width:300px;">
-																<form id="dzform" action="<%= basePath%>sysbase/test/upload" enctype="multipart/form-data" class="dropzone">
+																<form id="dzform" action="<%= basePath%>file/dropzone/upload" enctype="multipart/form-data" class="dropzone">
 																	<div id="preImg" class="dropzone-previews" style="max-width:200px;"></div> 
 																	<div class="dz-message" style="text-align:center;">点击或将图片<br/>拖动到此区域<br/>（图片小于5MB）</div> 
 																	<div class="fallback">
@@ -379,7 +379,7 @@
 														<input class="btn btn-info" type="button" id="btn" value="提交" onclick="permission.userInfo.submitUserInfo()"/>&nbsp; &nbsp; &nbsp;
 														<input class="btn btn-info" type="button" id="res" value="重置" onclick="permission.userInfo.resetUserInfo()"/>&nbsp; &nbsp; &nbsp;
 														<input class="btn btn-info" type="button" id="history" value="返回" onclick="permission.userInfo.goBack()"/>
-														<input id="update" type="hidden" value="update">
+														<input id="able" type="hidden" value="raise">
 													</div>
 												</div>
 											</form>
@@ -410,9 +410,9 @@
 					</div>
 				</div>
 				
-				<div id="titleTree-message" class="hide">
+				<div id="rankTree-message" class="hide">
 					<div class="zTreeDemoBackground left"  >
-						<ul id="titleTree" class="ztree"></ul>
+						<ul id="rankTree" class="ztree"></ul>
 					</div>
 				</div>
 				
