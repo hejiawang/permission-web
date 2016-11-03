@@ -169,9 +169,9 @@ public class PermissionPostController extends BaseController {
 			for (int i = 0; i < listp.size(); i++) {
 				srp = listp.get(i);
 				if(i==(listp.size()-1)){
-					sb.append("{id:"+srp.getPostID()+"\",name:\""+srp.getPostName()+"\"}");
+					sb.append("{id:"+srp.getPostID()+",name:\""+srp.getPostName()+"\"}");
 				}else{
-					sb.append("{id:"+srp.getPostID()+"\",name:\""+srp.getPostName()+"\"},");
+					sb.append("{id:"+srp.getPostID()+",name:\""+srp.getPostName()+"\"},");
 				}
 			}
 			sb.append("]");

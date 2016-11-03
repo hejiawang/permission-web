@@ -141,7 +141,7 @@ permission.userInfo = {
 				roleNames: {
 					required: "请选择权限",
 				},
-				ranlNames: {
+				rankNames: {
 					required: "请选择职级",
 				},
 				theNote: {
@@ -175,9 +175,38 @@ permission.userInfo = {
 	init	:	function(){
 		var _that = this;
 		jQuery.ajaxSetup({cache:false});
+
+		$("#userBirthday").datepicker({
+			showOtherMonths: true,
+			selectOtherMonths: false,			
+			changeMonth: true,
+			changeYear: true,
+		});
 		
+		_that.initValidator();
 		_that.initTable();
 		//_that.initUpload();
+	},
+	
+	/**
+	 * 新增验证规则
+	 */
+	initValidator	:	function(){
+		jQuery.validator.addMethod("isMobile", function(value, element) {       
+		     var length = value.length;   
+		    var mobile = /^(((1[3|5|8|4][0-9]{1}))+\d{8})$/;   
+		   return this.optional(element) || (length == 11 && mobile.test(value));       
+		}, "请正确填写您的手机号码");   
+		
+		$.validator.addMethod("onlyLetterAndDigit",function(value, element, params){  
+			if(value==""){
+				return this.optional(element)
+			}else{
+				var regex=new RegExp('^[0-9a-zA-Z]+$');  
+		        return regex.test(value); 
+			}
+	         
+	    },"只能输入字母或数字"); 
 	},
 	
 	/**
@@ -238,13 +267,13 @@ permission.userInfo = {
 	            },
 	            {   
 	            	"title":"生日",
-	            	"data": "birthday",
+	            	"data": "userBirthday",
 	            	"width":"15%",
 	            	"orderable": false,
 	            },
 	            {   
 	            	"title":"民族",
-	            	"data": "nation",
+	            	"data": "userNation",
 	            	"width":"10%",
 	            	"orderable": false,
 	            }],
@@ -446,6 +475,26 @@ permission.userInfo = {
 		$("#roleNames").val("");
 		$("#roleIDs").val("");
 		permission.userInfo.photoReset();
+	},
+	
+	/**
+	 * 新增用户页，控件不可用
+	 */
+	resourceDisable	:	function(){
+		$("#form-userinfoAndAccount input").attr("disabled","disabled");
+	  	$("#theNote").attr("disabled","disabled");
+	  	$("#btn").attr("disabled","disabled");
+	  	$("#res").attr("disabled","disabled");
+	},
+	
+	/**
+	 * 新增用户页，控件可用
+	 */
+	resourceRemoveDisable	:	function(){
+		$("#form-userinfoAndAccount input").removeAttr("disabled");
+	  	$("#theNote").removeAttr("disabled");
+	  	$("#btn").removeAttr("disabled");
+	  	$("#res").removeAttr("disabled");
 	},
 	
 	/**
@@ -727,7 +776,7 @@ permission.userInfo = {
 			enable: true,
 			url : permission.domainUrl.baseDomain + '/rank/trees',
 			dataType: "text",
-			type:"post",
+			type:"get",
 			autoParam: ["id"]
 		}
 	},
@@ -896,6 +945,8 @@ permission.userInfo = {
 			permission.userInfo.roleTrees();
 		});
 		
+		permission.userInfo.resourceRemoveDisable();
+		
 		$("#update").val("raise");
  		$("#selectAll").hide();
  		$("#saveForm").show();
@@ -936,6 +987,7 @@ permission.userInfo = {
 				success:function(result) {
 					if( result.success ){
 						permission.userInfo.viewCallBack(result.result);
+						permission.userInfo.resourceRemoveDisable();
 						
 						$("#update").val("modify");
 				 		$("#selectAll").hide();
@@ -979,7 +1031,7 @@ permission.userInfo = {
 	 * 查看用户信息
 	 */
 	goView	:	function(){
-		var userID = _that.goCheck();
+		var userID = permission.userInfo.goCheck();
 		if( userID != 0 ){
 			var goViewUrl = permission.userInfo.common.myurl + '/view/' + userID;
 			$.ajax({
@@ -990,8 +1042,9 @@ permission.userInfo = {
 				success:function(result) {
 					if( result.success ){
 						permission.userInfo.viewCallBack(result.result);
+						permission.userInfo.resourceDisable();
 						
-						$("#selectAll").hide();
+					  	$("#selectAll").hide();
 					  	$("#saveForm").show();
 					}
 				}

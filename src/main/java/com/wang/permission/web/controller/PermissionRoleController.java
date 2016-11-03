@@ -189,9 +189,9 @@ public class PermissionRoleController extends BaseController {
 			for (int i = 0; i < listp.size(); i++) {
 				srp = listp.get(i);
 				if(i==(listp.size()-1)){
-					sb.append("{id:"+srp.getRoleID()+"\",name:\""+srp.getRoleName()+"\"}");
+					sb.append("{id:"+srp.getRoleID()+",name:\""+srp.getRoleName()+"\"}");
 				}else{
-					sb.append("{id:"+srp.getRoleID()+"\",name:\""+srp.getRoleName()+"\"},");
+					sb.append("{id:"+srp.getRoleID()+",name:\""+srp.getRoleName()+"\"},");
 				}
 			}
 			sb.append("]");
