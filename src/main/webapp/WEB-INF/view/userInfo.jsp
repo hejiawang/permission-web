@@ -125,12 +125,6 @@
 									<button id="goModify" onclick="permission.userInfo.goModify();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >修改</button>
 									<button id="goView" onclick="permission.userInfo.goView();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >查看</button>
 									<button id="goErase" onclick="permission.userInfo.goErase();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >删除</button>
-									<button id="goErase" onclick="permission.userInfo.goPostMaintenance();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >岗位维护</button>
-									<button id="goErase" onclick="permission.userInfo.goPostRecord();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >岗位记录</button>
-									<button id="goErase" onclick="permission.userInfo.goRankMaintenance();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >职级维护</button>
-									<button id="goErase" onclick="permission.userInfo.goRankRecord();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >职级记录</button>
-									<button id="goErase" onclick="permission.userInfo.goOrgAuthorize();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >组织授权</button>
-									<button id="goErase" onclick="permission.userInfo.goDataAuthorize();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >数据授权</button>
 								</div>
 						    </div>	
 							<div class="col-xs-12" style="background-color: #F0F0F0; padding-top: 10px; padding-bottom: 10px;">
@@ -380,6 +374,7 @@
 														<input class="btn btn-info" type="button" id="res" value="重置" onclick="permission.userInfo.resetUserInfo()"/>&nbsp; &nbsp; &nbsp;
 														<input class="btn btn-info" type="button" id="history" value="返回" onclick="permission.userInfo.goBack()"/>
 														<input id="able" type="hidden" value="raise">
+														<input id="userID" name="userID" type="hidden" />
 													</div>
 												</div>
 											</form>
@@ -414,67 +409,6 @@
 					<div class="zTreeDemoBackground left"  >
 						<ul id="rankTree" class="ztree"></ul>
 					</div>
-				</div>
-				
-				<div id="post-dialog-message"  class="hide">
-					<form class="form-horizontal" id="post-form" role="form">
-						<div class="space-2"></div>
-						<div class="form-group">
-							<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">岗位:</label>
-							<div class="col-xs-12 col-sm-9">
-								<div class="clearfix">
-									<input type="text" id="adjust_postName" name="adjust_postName" class="col-xs-12 col-sm-7" />
-									<input type="hidden" id="adjust_postID" name="adjust_postID" class="col-xs-12 col-sm-7" />
-								</div>
-							</div>
-						</div>
-						<div class="space-2"></div>
-					</form>
-				</div>
-				<div id="title-dialog-message"  class="hide">
-					<form class="form-horizontal" id="title-form" role="form">
-						<div class="space-2"></div>
-						<div class="form-group">
-							<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">职级:</label>
-							<div class="col-xs-12 col-sm-9">
-								<div class="clearfix">
-									<input type="text" id="adjust_titleName" name="adjust_titleName" class="col-xs-12 col-sm-7" />
-									<input type="hidden" id="adjust_titleID" name="adjust_titleID" class="col-xs-12 col-sm-7" />
-									<input type="hidden" id="adjust_parentID" name="adjust_parentID" class="col-xs-12 col-sm-7" />
-								</div>
-							</div>
-						</div>
-						<div class="space-2"></div>
-					</form>
-				</div> 
-				<div id="history_post_dialog" class="hide">
-					<div class="table-responsive">
-						<table id="historyPostTable" class="table table-striped table-bordered table-hover" width="100%" cellspacing="0"></table>  
-					</div><!-- /.table-responsive -->
-				</div>
-				<div id="history_title_dialog" class="hide">
-					<div class="table-responsive">
-						<table id="historyTitleTable" class="table table-striped table-bordered table-hover" width="100%" cellspacing="0"></table>  
-					</div><!-- /.table-responsive -->
-				</div>
-				<div id="trees-message" class="hide">
-					<div class="zTreeDemoBackground left" style="float:left"  >
-						<ul id="resoureTree" class="ztree"></ul>
-					</div>
-					<div id="optr" class="zTreeDemoBackground right" style="float:left" >
-						<form >
-							<div id= "org_1001"></div>
-						</form>
-					</div>
-				</div>	
-				<div id="data-message" class="hide"  style="float: left;">
-					<form >
-						<div class="zTreeDemoBackground left" style="float:left"  >
-					   		<ul id="areaResoureTree" class="ztree"></ul>
-						</div>
-						<div class="zTreeDemoBackground right" style="position: relative; float: left; left:50px; width:300px" id="areList" class="hide">
-						</div>
-					</form>
 				</div>
 				
 				<%@include file="resource/footer.jsp"%>

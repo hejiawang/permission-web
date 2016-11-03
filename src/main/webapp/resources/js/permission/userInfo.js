@@ -26,6 +26,147 @@ permission.userInfo = {
 		 */
 		tableRowDateObj	:	Object,
 		
+		validate	:	$('#validation-form').validate({
+			errorElement: 'div',
+			errorClass: 'help-block',
+			focusInvalid: false,
+			rules: {
+				userCode: {
+					required: true,
+				},
+				userName: {
+					required: true,
+				},
+				userSex: {
+					required: true,
+				},
+				userTel: {
+					required: true,
+					mobile:true
+				},
+				userEmail: {
+					required: true,
+					email:true
+				}, 
+				userBirthday: {
+					required: false,
+				},
+				userNation: {
+					required: false,
+					maxlength:15
+				},
+				sortNum: {
+					required: true,
+					number: true,
+				},
+				loginName: {
+					required: true,
+					onlyLetterAndDigit:true,
+					minlength:3,
+					maxlength:18
+				},
+				passWords: {
+					required: true,
+					onlyLetterAndDigit:true,
+					minlength:6,
+					maxlength:30
+				},
+				passWordR: {
+					onlyLetterAndDigit:true,
+					equalTo:"input[name=passWords]"
+				},
+				orgName: {
+					required: true,
+				},
+				postNames: {
+					required: true,
+				},
+				roleNames: {
+					required: true,
+				},
+				rankNames: {
+					required: true,
+				},
+				theNote: {
+					required: false,
+					maxlength: 300
+				}
+			},
+	
+			messages:  {
+				userCode: {
+					required: "请输入用户编码",
+				},
+				userName: {
+					required: "请输入姓名",
+				},
+				userSex: {
+					required: "性别必选",
+				},
+				userTel: {
+					required: "请输入手机号",
+					isMobile:"请正确填写手机号"
+				},
+				userEmail: {
+					required: "请输入邮箱",
+					email:"邮箱格式错误"
+				},
+				userNation: {
+					maxlength: "民族不得超过15位"
+				},
+				sortNum: {
+					required: "请输入顺序",
+					number: "必须输入数字"
+				},
+				loginName: {
+					required: "请输入登录账号",
+					minlength:"登录名不得少于3位",
+					maxlength:"登录名不得超过18位"
+				},
+				passWords: {
+					required: "请输入密码",
+					minlength:"密码不得少于6位",
+					maxlength:"密码不得超过30位"
+				},
+				passWordR: {
+					equalTo:"两次密码不一致"
+				},
+				
+				orgName: {
+					required: "请选择机构",
+				},
+				postNames: {
+					required: "请选择岗位",
+				},
+				roleNames: {
+					required: "请选择权限",
+				},
+				ranlNames: {
+					required: "请选择职级",
+				},
+				theNote: {
+					maxlength:"最多填写300位字符!"
+				}
+			},
+	
+			invalidHandler: function (event, validator) {   
+				$('.alert-danger', $('.login-form')).show();
+			},
+	
+			highlight: function (e) {
+				$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+			},
+	
+			success: function (e) {
+				$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+				$(e).remove();
+			},
+			submitHandler: function (form) {
+			},
+			invalidHandler: function (form) {
+			}
+		}),
+		
 	},
 	
 	/**
@@ -36,6 +177,7 @@ permission.userInfo = {
 		jQuery.ajaxSetup({cache:false});
 		
 		_that.initTable();
+		//_that.initUpload();
 	},
 	
 	/**
@@ -226,12 +368,47 @@ permission.userInfo = {
 	 * 新增用户页面——提交
 	 */
 	submitUserInfo	:	function(){
-		var able = $("#able").val();
-		if( able == 'raise' ){	//新增用户
+		if($("#validation-form").valid()){
 			
-		} else {  //able == 'modify'  修改用户
-			
-		} 
+			var able = $("#able").val();
+			if( able == 'raise' ){	//新增用户
+				var goRaiseUrl = _that.common.myurl + '/raise';
+				$.ajax({
+					url : goRaiseUrl,
+					data : $("#validation-form").serialize(),
+					type: "post",
+					dataType : 'json',
+					success: function( result ){
+						layer.msg(result.message);
+
+						if(result.success){
+							$( dialog_that ).dialog( "close" ); 
+
+							var table = $('#example').DataTable();
+							table.ajax.url(_that.common.myurl + '/page').load();
+						}
+					}
+				});
+			} else {  //able == 'modify'  修改用户
+				var goModifyUrl = _that.common.myurl + '/modify';
+				$.ajax({
+					url : goModifyUrl,
+					data : $("#validation-form").serialize(),
+					type: "post",
+					dataType : 'json',
+					success: function( result ){
+						layer.msg(result.message);
+
+						if(result.success){
+							$( dialog_that ).dialog( "close" ); 
+
+							var table = $('#example').DataTable();
+							table.ajax.url(_that.common.myurl + '/page').load();
+						}
+					}
+				});
+			} 
+		}
 	},
 	
 	/**
@@ -246,6 +423,7 @@ permission.userInfo = {
 	 * 新增用户页面——重置用户信息
 	 */
 	resetUserInfo	:	function(){
+		$("#userID").val("");
 		$("#userCode").val("");
  		$("#userName").val("");
  		$("#userTel").val("");
@@ -312,6 +490,92 @@ permission.userInfo = {
 	},
 	
 	/**
+	 * 上传头像图片
+	 */
+	initUpload	:	function(){
+		 $("#dzform").dropzone({
+			 	url : permission.domainUrl.baseDomain + "/file/dropzone/upload" ,
+			    paramName: "file", // The name that will be used to transfer the file
+			    maxFilesize: 5, // MB
+			    maxFiles:1, //最新版本已经修改 如果最大文件为1 则input没有Multiple属性 https://github.com/enyo/dropzone/pull/386/files
+			    method:"post",//Defaults to "post" and can be changed to "put" if necessary.
+			    
+				dictRemoveFile : "删除",
+				dictDefaultMessage: "点击或将图片拖动到此区域",
+				dictFallbackMessage: "你的浏览器不支持拖动上传",
+				dictMaxFilesExceeded: "超过最大图片数量(1张)",
+				dictCancelUpload: "取消上传",
+				dictCancelUploadConfirmation: "确认要取消上传吗？",
+				dictFileTooBig: "上传文件过大(小于0.5MB)",
+				dictInvalidFileType: "不支持这种类型的文件",
+				dictResponseError: "上传文件时出错",
+				
+				addRemoveLinks : true,
+//				acceptedFiles: ".jpeg,.jpg,.png,.gif,.JPEG,.JPG,.PNG,.GIF",
+				acceptedFiles: "image/*",
+				uploadMultiple: false,
+				thumbnailWidth:	100,//if null, the ratio of the image will be used to calculate it.
+				thumbnailHeight: 100,//the same as thumbnailWidth. If both are null, images will not be resized.
+				
+				
+				autoProcessQueue: false, // Make sure the files aren't queued until manually added
+				previewsContainer: "#preImg", // Define the container to display the previews
+				
+				 init: function () {
+					 	$("#submit-all").hide();
+		                var submitButton = document.querySelector("#submit-all");
+		                myDropzone = this; // closure
+
+		                //为上传按钮添加点击事件
+		                submitButton.addEventListener("click", function () {
+		                    //手动上传所有图片
+		                    myDropzone.processQueue();
+		                });
+		                
+		                
+		                myDropzone.on("maxfilesexceeded", function(file){
+		                	myDropzone.removeFile(file);
+		                });
+		                
+		                myDropzone.on("success", function(file,successMessage){
+							$("#photoFile").val(successMessage.url);
+							$("#previewImg").attr("src","<%=basePath%>"+successMessage.url);
+							$("#previewImg").show();
+							$("#submit-all").hide();
+		                });
+		                
+		                myDropzone.on("error", function(file,errorMessage){
+							if(errorMessage.error!=undefined){
+								alert(errorMessage.error);
+							}
+		                });
+		                
+		              //当添加图片后的事件，上传按钮恢复可用
+		                myDropzone.on("addedfile", function () {
+							//如果已经有图片了则删掉已经存在的图片
+//							var qFiles = myDropzone.getQueuedFiles();//这个函数是获得处于队列中的文件
+							var aFiles = myDropzone.getAcceptedFiles();
+							var rFiles = myDropzone.getRejectedFiles();
+							if(aFiles.length>0){
+								myDropzone.removeFile(aFiles[0]);
+							}
+							if(rFiles.length>1){
+								myDropzone.removeFile(rFiles[0]);
+							}
+		                    $("#submit-all").show();
+		                });
+		              
+		                //删除图片的事件，当上传的图片为空时，使上传按钮不可用状态
+		                myDropzone.on("removedfile", function () {
+		                    if (this.getAcceptedFiles().length == 0) {
+		                        $("#submit-all").hide();
+		                    }
+		                });
+				 },       
+		 });
+	 },
+	
+	/**
 	 * 机构树参数
 	 */
 	orgTreeSetting	:	{
@@ -357,6 +621,7 @@ permission.userInfo = {
 					nodes = zTree.getCheckedNodes(true);
 					if( nodes.length == 0 ){
 						layer.msg("请选择所属机构");
+						return false;
 					}
 					var parId = nodes[0].id;
 					var parName = nodes[0].name;
@@ -413,6 +678,7 @@ permission.userInfo = {
 					nodes = zTree.getCheckedNodes(true);
 					if( nodes.length == 0 ){
 						layer.msg("请选择岗位");
+						return false;
 					}
 					
 					var postIDs = "";
@@ -463,10 +729,7 @@ permission.userInfo = {
 			dataType: "text",
 			type:"post",
 			autoParam: ["id"]
-		}, 
-		/*callback: {
-			onAsyncSuccess: onAsyncSuccessTitleTree,
-		},*/
+		}
 	},
 	
 	/**
@@ -490,10 +753,22 @@ permission.userInfo = {
 					if( nodes.length == 0 ){
 						layer.msg("请选择职级");
 					}
-					/*var parId = nodes[0].id;
-					var parName = nodes[0].name;
-					$("#rankIDs").val(parId);
-					$("#rankNames").val(parName);*/
+					
+					var rankIDs = "";
+					var rankNames = "";
+					for( var i=0; i<nodes.length; i++ ){
+						if( ! nodes[i].isParent ){//不存父级职级
+							rankIDs = rankIDs + nodes[i].id + ",";
+							rankNames = rankNames + nodes[i].name + ",";
+						}
+					}
+					rankIDs = rankIDs.substring(0, rankIDs.length-1);
+					rankNames = rankNames.substring(0, rankNames.length-1);
+					
+					if( rankIDs == "" ){	//未选中一个子职级
+						layer.msg("请选择职级");
+						return false;
+					}
 					$(this).dialog("close");
 				}
 			}, {
@@ -506,22 +781,98 @@ permission.userInfo = {
 		});
 	},
 	
+	/**
+	 * 角色树参数
+	 */
+	roleTreeSetting : {
+		view: {
+			selectedMulti: false, 
+		},
+		check: {
+			enable: true
+		}
+	},
 	
+	/**
+	 * 角色树
+	 */
+	roleTrees	:	function(){
+		$.ajax({
+			url : permission.domainUrl.baseDomain + '/role/trees',
+			data : {},
+			type: "get",
+			dataType : 'text',
+			success: function( data ){
+				$.fn.zTree.init($("#roleTree"), permission.userInfo.roleTreeSetting, eval(data));
+			}
+		});
+		
+		$("#roleTree-message").removeClass('hide').dialog({
+			modal : true,
+			title : "角色",
+			title_html : true,
+			width : 300,
+			buttons : [{
+				text : "确定",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					var zTree = $.fn.zTree.getZTreeObj("roleTree");
+					nodes = zTree.getCheckedNodes(true);
+					if( nodes.length == 0 ){
+						layer.msg("请选择角色");
+						return false;
+					}
+					
+					var roleIDs = "";
+					var roleNames = "";
+					for (var i=0, l=nodes.length; i<l; i++) {
+						roleIDs = roleIDs+ nodes[i].id+",";
+						roleNames = roleNames+ nodes[i].name+",";
+					} 
+					roleIDs = roleIDs.substring(0, roleIDs.length-1);
+					roleNames = roleNames.substring(0, roleNames.length-1);
+					$("#roleIDs").val(roleIDs);
+					$("#roleNames").val(roleNames);
+					
+					$(this).dialog("close");
+				}
+			}, {
+				text : "关闭",
+				"class" : "btn btn-primary btn-xs",
+				click : function() {
+					$(this).dialog("close");
+				}
+			}]
+		});
+	},
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 查看用户回调,显示数据
+	 */
+	viewCallBack	:	function(data){
+		$("#userID").val(data.userID);
+		$("#userCode").val(data.userCode);
+ 		$("#userName").val(data.userName);
+ 		$("#userTel").val(data.userTel);
+ 		$("#userEmail").val(data.userEmail);
+ 		$("#userBirthday").val(data.userBirthday);
+ 		$("#userNation").val(data.userNation);
+ 		//$("#photoFile").val("");
+ 		$("#theNote").val(data.theNote);
+ 		$("#sortNum").val(data.sortNum);
+ 		$("#loginName").val(data.loginName);
+ 		$("#passWord").val("");
+ 		$("#passWordR").val("");
+ 		
+ 		$("#orgName").val(data.orgName);
+		$("#orgID").val(data.orgID);
+		$("#postNames").val(data.postNames);
+		$("#postIDs").val(data.postIDs);
+		$("#rankNames").val(data.rankNames);
+		$("#rankIDs").val(data.rankIDs);
+		$("#roleNames").val(data.roleNames);
+		$("#roleIDs").val(data.roleIDs);
+	},
 	
 	/**
 	 * 新增用户
@@ -548,5 +899,103 @@ permission.userInfo = {
 		$("#update").val("raise");
  		$("#selectAll").hide();
  		$("#saveForm").show();
+	},
+	
+	/**
+	 * 修改用户
+	 */
+	goModify	:	function(){
+		
+		var userID = permission.userInfo.goCheck();
+		if( userID != 0 ){
+			
+			permission.userInfo.resetUserInfo();
+			permission.userInfo.clearDropzone();
+			permission.userInfo.enableDropzone();
+			permission.userInfo.clearValidation();
+			
+			$("#orgName").delegate("","click",function (){
+				permission.userInfo.OrgTrees();
+			});
+			$("#postNames").delegate("","click",function (){
+				permission.userInfo.postTrees();
+			});
+			$("#rankNames").delegate("","click",function (){
+				permission.userInfo.rankTrees();
+			});
+			$("#roleNames").delegate("","click",function (){
+				permission.userInfo.roleTrees();
+			});
+			
+			var goViewUrl = permission.userInfo.common.myurl + '/view/' + userID;
+			$.ajax({
+				url : goViewUrl,
+				data : {},
+				type: "get",
+				dataType : 'json',
+				success:function(result) {
+					if( result.success ){
+						permission.userInfo.viewCallBack(result.result);
+						
+						$("#update").val("modify");
+				 		$("#selectAll").hide();
+				 		$("#saveForm").show();
+					}
+				}
+			});
+		}
+	},
+	
+	/**
+	 * 删除用户
+	 */
+	goErase	:	function(){
+		var userInfoID = permission.userInfo.goCheck();
+		if( userInfoID != 0 ){
+			var goEraseUrl = permission.userInfo.common.myurl + '/erase/' + userInfoID;
+			
+			layer.confirm('确认删除该用户！', {
+				  btn: ['删除','取消'], //按钮
+				  shade: false //不显示遮罩
+			}, function(){
+				$.ajax({
+					url : goEraseUrl,
+					data : {},
+					type: "get",
+					dataType : 'json',
+					success:function(result) {
+						layer.msg(result.message);
+						if( result.seccess ){
+							table.ajax.url(permission.userInfo.common.myurl + '/page').load();
+						}
+					}
+				});
+			}, function(){
+			});
+		}
+	},
+	
+	/**
+	 * 查看用户信息
+	 */
+	goView	:	function(){
+		var userID = _that.goCheck();
+		if( userID != 0 ){
+			var goViewUrl = permission.userInfo.common.myurl + '/view/' + userID;
+			$.ajax({
+				url : goViewUrl,
+				data : {},
+				type: "get",
+				dataType : 'json',
+				success:function(result) {
+					if( result.success ){
+						permission.userInfo.viewCallBack(result.result);
+						
+						$("#selectAll").hide();
+					  	$("#saveForm").show();
+					}
+				}
+			});
+		}
 	},
 }
