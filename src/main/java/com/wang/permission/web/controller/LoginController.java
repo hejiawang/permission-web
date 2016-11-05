@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wang.core.ServiceResult;
 import com.wang.core.util.DomainUrlUtil;
-import com.wang.core.util.RegExpValidator;
 import com.wang.permission.web.util.SessionUtil;
 import com.wang.service.entity.permission.PermissionUserInfoEntity;
 import com.wang.service.service.permission.PermissionLoginService;
