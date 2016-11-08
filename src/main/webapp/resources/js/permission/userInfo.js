@@ -65,7 +65,7 @@ permission.userInfo = {
 					minlength:3,
 					maxlength:18
 				},
-				passWords: {
+				passWord: {
 					required: true,
 					onlyLetterAndDigit:true,
 					minlength:6,
@@ -73,7 +73,7 @@ permission.userInfo = {
 				},
 				passWordR: {
 					onlyLetterAndDigit:true,
-					equalTo:"input[name=passWords]"
+					equalTo:"input[name=passWord]"
 				},
 				orgName: {
 					required: true,
@@ -123,7 +123,7 @@ permission.userInfo = {
 					minlength:"登录名不得少于3位",
 					maxlength:"登录名不得超过18位"
 				},
-				passWords: {
+				passWord: {
 					required: "请输入密码",
 					minlength:"密码不得少于6位",
 					maxlength:"密码不得超过30位"
@@ -399,9 +399,15 @@ permission.userInfo = {
 	submitUserInfo	:	function(){
 		if($("#validation-form").valid()){
 			
+			/*var param = {
+					userCode : $("#userCode").val(),
+					userName : $("#userName").val(),
+					userName : $("#userName").val(),
+			};*/
+			
 			var able = $("#able").val();
 			if( able == 'raise' ){	//新增用户
-				var goRaiseUrl = _that.common.myurl + '/raise';
+				var goRaiseUrl = permission.userInfo.common.myurl + '/raise';
 				$.ajax({
 					url : goRaiseUrl,
 					data : $("#validation-form").serialize(),
@@ -813,6 +819,9 @@ permission.userInfo = {
 					}
 					rankIDs = rankIDs.substring(0, rankIDs.length-1);
 					rankNames = rankNames.substring(0, rankNames.length-1);
+					
+					$("#rankIDs").val(rankIDs);
+					$("#rankNames").val(rankNames);
 					
 					if( rankIDs == "" ){	//未选中一个子职级
 						layer.msg("请选择职级");

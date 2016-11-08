@@ -205,11 +205,11 @@
 														<div class="col-xs-12 col-sm-9">
 															<div>
 																<label class="blue">
-																	<input name="userSex" value="男" type="radio" class="ace"  checked="checked"/>
+																	<input name="userSex" value="1" type="radio" class="ace"  checked="checked"/>
 																	<span class="lbl"> 男</span>
 																</label>
 																<label class="blue">
-																	<input name="userSex" value="女" type="radio" class="ace" />
+																	<input name="userSex" value="2" type="radio" class="ace" />
 																	<span class="lbl"> 女</span>
 																
 																</label>
