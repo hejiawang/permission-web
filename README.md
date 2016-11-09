@@ -4,6 +4,7 @@
 <ul>
 
 	<li>机构管理</li>
+<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/1机构管理.png"/>
 
 ![image](https://github.com/hejiawang/permission-web/raw/master/doc/image/1机构管理.png)
 
