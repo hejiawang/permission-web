@@ -18,45 +18,45 @@
 <ul>
 
 	<li><h2>机构管理</h2></li>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/1机构管理.png"/>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/1机构管理——新增.png"/>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/1机构管理.png"/></br>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/1机构管理——新增.png"/></br>
 	</br>
 		
 	<li><h2>岗位管理</h2></li>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/2岗位管理.png"/>	
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/2岗位管理.png"/></br>	
 	</br>
 		
 	<li><h2>职级管理</h2></li>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/3职级管理.png"/>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/3职级管理.png"/></br>
 	</br>
 	
 	<li><h2>角色管理</h2></li>
 		在这个权限管理系统之中，角色管理是核心，在登陆时根据该登陆者的角色所拥有的权限进行权限控制
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/4角色管理.png"/>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/4角色管理——权限维护.png"/>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/4角色管理.png"/></br>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/4角色管理——权限维护.png"/></br>
 	</br>
 	
 	<li><h2>系统类型</h2></li>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/5系统类型.png"/>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/5系统类型.png"/></br>
 	</br>
 	
 	<li><h2>应用系统</h2></li>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/6应用系统.png"/>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/6应用系统.png"/></br>
 	</br>
 	
 	<li><h2>菜单管理</h2></li>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/7菜单管理.png"/>	
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/7菜单管理——新增.png"/>	
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/7菜单管理.png"/></br>	
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/7菜单管理——新增.png"/></br>	
 	</br>
 	
 	<li><h2>页面元素</h2></li>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/8页面元素.png"/>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/8页面元素——新增.png"/>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/8页面元素.png"/></br>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/8页面元素——新增.png"/></br>
 	</br>
 	
 	<li><h2>用户管理</h2></li>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/9用户管理.png"/>
-		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/9用户管理——新增.png"/>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/9用户管理.png"/></br>
+		<img src="https://github.com/hejiawang/permission-web/raw/master/doc/image/9用户管理——新增.png"/></br>
 	</br>
 
 </ul>
