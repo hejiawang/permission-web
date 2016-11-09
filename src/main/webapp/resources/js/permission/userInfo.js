@@ -399,12 +399,6 @@ permission.userInfo = {
 	submitUserInfo	:	function(){
 		if($("#validation-form").valid()){
 			
-			/*var param = {
-					userCode : $("#userCode").val(),
-					userName : $("#userName").val(),
-					userName : $("#userName").val(),
-			};*/
-			
 			var able = $("#able").val();
 			if( able == 'raise' ){	//新增用户
 				var goRaiseUrl = permission.userInfo.common.myurl + '/raise';
@@ -417,15 +411,16 @@ permission.userInfo = {
 						layer.msg(result.message);
 
 						if(result.success){
-							$( dialog_that ).dialog( "close" ); 
-
+							$("#selectAll").show();
+					 		$("#saveForm").hide();
+							
 							var table = $('#example').DataTable();
-							table.ajax.url(_that.common.myurl + '/page').load();
+							table.ajax.url(permission.userInfo.common.myurl + '/page').load();
 						}
 					}
 				});
 			} else {  //able == 'modify'  修改用户
-				var goModifyUrl = _that.common.myurl + '/modify';
+				var goModifyUrl = permission.userInfo.common.myurl + '/modify';
 				$.ajax({
 					url : goModifyUrl,
 					data : $("#validation-form").serialize(),
@@ -435,10 +430,11 @@ permission.userInfo = {
 						layer.msg(result.message);
 
 						if(result.success){
-							$( dialog_that ).dialog( "close" ); 
+							$("#selectAll").show();
+					 		$("#saveForm").hide();
 
 							var table = $('#example').DataTable();
-							table.ajax.url(_that.common.myurl + '/page').load();
+							table.ajax.url(permission.userInfo.common.myurl + '/page').load();
 						}
 					}
 				});
@@ -998,7 +994,7 @@ permission.userInfo = {
 						permission.userInfo.viewCallBack(result.result);
 						permission.userInfo.resourceRemoveDisable();
 						
-						$("#update").val("modify");
+						$("#able").val("modify");
 				 		$("#selectAll").hide();
 				 		$("#saveForm").show();
 					}
@@ -1027,6 +1023,8 @@ permission.userInfo = {
 					success:function(result) {
 						layer.msg(result.message);
 						if( result.seccess ){
+							$("#selectAll").show();
+					 		$("#saveForm").hide();
 							table.ajax.url(permission.userInfo.common.myurl + '/page').load();
 						}
 					}
