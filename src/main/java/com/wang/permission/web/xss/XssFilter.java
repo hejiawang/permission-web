@@ -31,7 +31,14 @@ public class XssFilter implements Filter {
 	private final static Set<String> ANONYMOUS_URLS = new HashSet<String>();
 
 	static {
-		//ANONYMOUS_URLS.add("xxx.html");
+		ANONYMOUS_URLS.add("/app/raise");
+		ANONYMOUS_URLS.add("/app/modify");
+		
+		ANONYMOUS_URLS.add("/menu/raise");
+		ANONYMOUS_URLS.add("/menu/modify");
+		
+		ANONYMOUS_URLS.add("/element/raise");
+		ANONYMOUS_URLS.add("/element/modify");
 	}
 
 	@Override
