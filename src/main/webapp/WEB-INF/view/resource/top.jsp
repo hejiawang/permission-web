@@ -68,10 +68,10 @@
 	$(function(){
 		
 		//初始化头部app信息
-		var appID_top = UrlParm.parm("param_app_id");
+		//var appID_top = UrlParm.parm("param_app_id");
 		$.ajax({
 			url : permission.domainUrl.baseDomain + "/permission/core/initApp",
-			data : {"appID":appID_top},
+			data : {},
 			type: "get",
 			dataType : 'json',
 			success:function(result) {
@@ -80,6 +80,19 @@
 		});
 	});
 	
+	function changeApp(appID){
+		$.ajax({
+			url : permission.domainUrl.baseDomain + "/permission/core/changeApp",
+			data : {"appID" : appID},
+			type: "get",
+			dataType : 'json',
+			success:function(result) {
+				if(result.success){
+					window.location.href = 	permission.domainUrl.baseDomain + "/pageGoto" + result.data.url;
+				}
+			}
+		});
+	}
 	
 	// 百度统计
 	var _hmt = _hmt || [];

@@ -61,7 +61,7 @@ public class PermissionCoreController extends BaseController {
 	 */
 	@RequestMapping(value = "initApp", method = RequestMethod.GET)
 	@ResponseBody
-	public ServiceResult<String> initApp(HttpServletRequest request, HttpSession session,Integer appID) {
+	public ServiceResult<String> initApp(HttpServletRequest request, HttpSession session) {
 		
 		ServiceResult<String> result = null;
 		try {
@@ -75,6 +75,7 @@ public class PermissionCoreController extends BaseController {
 			 * 获取当前登陆者的APP
 			 */
 			PermissionAppParam defaultApp = null;
+			Integer appID = (Integer) session.getAttribute("defaultApp");
 			if( appID == null ){	//刚登陆，默认的APP
 				defaultApp = permissionUserInfoService.getDefaultAppByUserID(currentUserID).getResult();
 			} else {
@@ -90,6 +91,28 @@ public class PermissionCoreController extends BaseController {
 	}
 	
 	/**
+	 * 选择应用系统
+	 * @param appID 应用系统ID
+	 * @return ServiceResult
+	 * @author HeJiawang
+	 * @date   2016.11.14
+	 */
+	@RequestMapping(value = "changeApp", method = RequestMethod.GET)
+	@ResponseBody
+	public ServiceResult<PermissionAppParam> changeApp(HttpServletRequest request, HttpSession session, Integer appID) {
+		ServiceResult<PermissionAppParam> result = null;
+		
+		try {
+			result = permissionAppService.getApp(appID);
+			session.setAttribute("defaultApp", result.getResult().getAppID());
+		} catch(Exception e){
+			logger.error("异常发生在"+this.getClass().getName()+"类的initApp方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		return result;
+	}
+	
+	
+	/**
 	 * 初始化当前登录者所在系统的菜单列表
 	 * @param request request
 	 * @return 菜单列表HTML
@@ -98,7 +121,7 @@ public class PermissionCoreController extends BaseController {
 	 */
 	@RequestMapping(value = "initMenu", method = {RequestMethod.GET})
 	@ResponseBody
-	public ServiceResult<String> initMenu(HttpServletRequest request, Integer appID){
+	public ServiceResult<String> initMenu(HttpServletRequest request, HttpSession session){
 		ServiceResult<String> result = null;
 		try {
 			/**
@@ -111,6 +134,7 @@ public class PermissionCoreController extends BaseController {
 			 * 获取当前登陆者的APP
 			 */
 			PermissionAppParam defaultApp = null;
+			Integer appID = (Integer) session.getAttribute("defaultApp");
 			if( appID == null ){	//刚登陆，默认的APP
 				defaultApp = permissionUserInfoService.getDefaultAppByUserID(currentUserID).getResult();
 			} else {

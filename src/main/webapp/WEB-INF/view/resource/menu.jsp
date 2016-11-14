@@ -38,11 +38,9 @@
 	$(function(){
 		
 		//初始化头部app信息
-//		var appID_menu = UrlParm.parm("param_app_id");
-		var appID_menu = <%= session.getAttribute("defaultApp")%>;
 		$.ajax({
 			url : permission.domainUrl.baseDomain + "/permission/core/initMenu",
-			data : {"appID":appID_menu},
+			data : {},
 			type: "get",
 			dataType : 'json',
 			success:function(result) {
