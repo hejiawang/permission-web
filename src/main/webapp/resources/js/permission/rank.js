@@ -162,8 +162,28 @@ permission.rank = {
 	init	:	function(){
 		var _that = this;
 		
+		_that.initMenuResource();
 		_that.initTree();
 		_that.initTable();
+	},
+	
+	/**
+	 * 初始化权限菜单
+	 * @date 2016.11.14
+	 */
+	initMenuResource	:	function(){
+		var mid = UrlParm.parm("sid");
+		$("#menu_"+UrlParm.parm("sid")).attr("class","active");
+		
+		$.ajax({
+			url : permission.domainUrl.baseDomain + "/permission/core/initElement",
+			data : {"menuID" : mid},
+			type: "get",
+			dataType : 'json',
+			success:function(result) {
+				$("#elementbut").html(result.result);
+			}
+		});
 	},
 	
 	/**

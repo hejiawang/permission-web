@@ -1,6 +1,7 @@
 package com.wang.permission.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.wang.core.ServiceResult;
 import com.wang.permission.web.util.SessionUtil;
 import com.wang.service.entity.permission.PermissionUserInfoEntity;
 import com.wang.service.param.permission.PermissionAppParam;
+import com.wang.service.service.permission.PermissionAppService;
 import com.wang.service.service.permission.PermissionCoreService;
 import com.wang.service.service.permission.PermissionUserInfoService;
 
@@ -39,6 +42,12 @@ public class PermissionCoreController extends BaseController {
 	private PermissionUserInfoService permissionUserInfoService;
 	
 	/**
+	 * permissionAppService
+	 */
+	@Autowired
+	private PermissionAppService permissionAppService;
+	
+	/**
 	 * log
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(PermissionCoreController.class);
@@ -50,8 +59,9 @@ public class PermissionCoreController extends BaseController {
 	 * @author HeJiawang
 	 * @date   2016.11.04
 	 */
-	@RequestMapping(value = "initApp", method = {RequestMethod.GET})
-	public ServiceResult<String> initApp(HttpServletRequest request) {
+	@RequestMapping(value = "initApp", method = RequestMethod.GET)
+	@ResponseBody
+	public ServiceResult<String> initApp(HttpServletRequest request, HttpSession session,Integer appID) {
 		
 		ServiceResult<String> result = null;
 		try {
@@ -62,9 +72,15 @@ public class PermissionCoreController extends BaseController {
 			Integer currentUserID = userCurrent.getUserID();
 			
 			/**
-			 * 获取当前登陆者的默认APP
+			 * 获取当前登陆者的APP
 			 */
-			PermissionAppParam defaultApp = permissionUserInfoService.getDefaultAppByUserID(currentUserID).getResult();
+			PermissionAppParam defaultApp = null;
+			if( appID == null ){	//刚登陆，默认的APP
+				defaultApp = permissionUserInfoService.getDefaultAppByUserID(currentUserID).getResult();
+			} else {
+				defaultApp = permissionAppService.getApp(appID).getResult();
+			}
+			session.setAttribute("defaultApp", defaultApp.getAppID());
 			
 			result = permissionCoreService.changeApp(userCurrent, defaultApp);
 		} catch(Exception e){
@@ -81,7 +97,8 @@ public class PermissionCoreController extends BaseController {
 	 * @date   2016.11.05
 	 */
 	@RequestMapping(value = "initMenu", method = {RequestMethod.GET})
-	public ServiceResult<String> initMenu(HttpServletRequest request){
+	@ResponseBody
+	public ServiceResult<String> initMenu(HttpServletRequest request, Integer appID){
 		ServiceResult<String> result = null;
 		try {
 			/**
@@ -91,9 +108,14 @@ public class PermissionCoreController extends BaseController {
 			Integer currentUserID = userCurrent.getUserID();
 			
 			/**
-			 * 获取当前登陆者的默认APP
+			 * 获取当前登陆者的APP
 			 */
-			PermissionAppParam defaultApp = permissionUserInfoService.getDefaultAppByUserID(currentUserID).getResult();
+			PermissionAppParam defaultApp = null;
+			if( appID == null ){	//刚登陆，默认的APP
+				defaultApp = permissionUserInfoService.getDefaultAppByUserID(currentUserID).getResult();
+			} else {
+				defaultApp = permissionAppService.getApp(appID).getResult();
+			}
 			
 			result = permissionCoreService.changeMenu(userCurrent, defaultApp);
 		} catch(Exception e){
@@ -110,6 +132,8 @@ public class PermissionCoreController extends BaseController {
 	 * @author HeJiawang
 	 * @date   2016.11.05
 	 */
+	@RequestMapping(value = "initElement", method = {RequestMethod.GET})
+	@ResponseBody
 	public ServiceResult<String> initElement(HttpServletRequest request, Integer menuID){
 		ServiceResult<String> result = null;
 		try {

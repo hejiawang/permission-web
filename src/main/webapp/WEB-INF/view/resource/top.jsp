@@ -29,14 +29,13 @@
 			</a>
 		</div>
 
-		<div class="navbar-buttons navbar-header pull-right" role="navigation">
-			<ul class="nav ace-nav">
+		<div class="navbar-buttons navbar-header pull-right" role="navigation" id="top_App_Info_div">
+			<!-- ul class="nav ace-nav">
 				<li class="light-blue">
 					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 						<img class="nav-user-photo" src="resources/avatars/user.jpg" alt="Jason's Photo" />
 						<span class="user-info" style="font-family: 微软雅黑">
 							<small>欢迎您,</small>
-							<!--%=session.getAttribute("userName") %-->
 							<small id="user_user_name">sdf</small>
 						</span>
 	
@@ -54,7 +53,7 @@
 						</li>
 					</ul>
 				</li>
-			</ul> 
+			</ul--> 
 		</div>
 	</div><!-- /.navbar-container -->
 </div>
@@ -65,6 +64,22 @@
 		baseDomain : '<%=DomainUrlUtil.BASEURL_DOMAIN%>',
 		imageDomain : '<%=DomainUrlUtil.IMG_BASEURL_DOMAIN%>',
 	}
+	
+	$(function(){
+		
+		//初始化头部app信息
+		var appID_top = UrlParm.parm("param_app_id");
+		$.ajax({
+			url : permission.domainUrl.baseDomain + "/permission/core/initApp",
+			data : {"appID":appID_top},
+			type: "get",
+			dataType : 'json',
+			success:function(result) {
+				$("#top_App_Info_div").html(result.result);
+			}
+		});
+	});
+	
 	
 	// 百度统计
 	var _hmt = _hmt || [];

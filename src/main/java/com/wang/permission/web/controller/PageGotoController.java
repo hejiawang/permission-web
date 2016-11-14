@@ -57,5 +57,23 @@ public class PageGotoController extends BaseController {
 		}
 		return pageName;
 	}
+	@RequestMapping(value = "/{folderName}/{pageName}", method = {RequestMethod.GET})
+	public String pageGoto(HttpServletRequest request, HttpServletResponse response, HttpSession session,  Model model, 
+			@PathVariable String folderName, @PathVariable String pageName) {
+		
+		try {
+			Enumeration<String> parameters = request.getParameterNames();
+			while(parameters.hasMoreElements()){
+				
+				String paramKey = parameters.nextElement();
+				String paramValue = request.getParameter(paramKey) != null ? URLDecoder.decode(request.getParameter(paramKey), "UTF-8") : "";
+				model.addAttribute(paramKey, paramValue);
+			}
+		} catch (Exception e) {
+			pageName = "error/404";	//发生异常,回到登录页
+			logger.error("异常发生在"+this.getClass().getName()+"类的index方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		return folderName + "/" + pageName;
+	}
 	
 }

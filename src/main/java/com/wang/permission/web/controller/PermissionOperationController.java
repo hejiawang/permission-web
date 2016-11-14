@@ -148,6 +148,57 @@ public class PermissionOperationController extends BaseController {
 	}
 	
 	/**
+	 * 获取页面元素对应的操作树
+	 * @param elementID 页面元素ID
+	 * @return 操作树
+	 * @author HeJiawang
+	 * @date   2016.10.21
+	 */
+	@RequestMapping(value="/trees/element",method = RequestMethod.GET,produces="text/plain;charset=UTF-8")
+	public @ResponseBody String queryElementOperationForTree(Integer elementID){
+		StringBuffer sb=new StringBuffer();
+		try{
+			List<PermissionOperationEntity> list = permissionOperationService.getOperationForElement().getResult();//所有操作
+			List<Integer> opList = new ArrayList<Integer>();
+			if(elementID!=null){
+				PermissionResourceEntity resource = permissionResourceService.getResourceByElementID(elementID).getResult();
+				opList = permissionOperationService.getOperationIDByResourceID(resource.getResourceID()).getResult();//当前menu对应的操作
+			}
+			PermissionOperationEntity operations;
+			sb.append("[");
+			for (int i = 0; i < list.size(); i++) {
+				operations = list.get(i);
+				if(opList!=null&&opList.size()>0){
+					if(opList.contains(operations.getOperationID())){
+						if(i==(list.size()-1)){
+							sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\",checked:true}");
+						}else{
+							sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\",checked:true},");
+						}
+					}else{
+						if(i==(list.size()-1)){
+							sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\"}");
+						}else{
+							sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\"},");
+						}
+					}
+				}else{
+					if(i==(list.size()-1)){
+						sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\"}");
+					}else{
+						sb.append("{id:"+operations.getOperationID()+",name:\""+operations.getOperationName()+"\"},");
+					}
+				}
+			}
+			sb.append("]");
+			logger.debug("操作树JSON====="+sb.toString());
+		}catch(Exception e){
+			logger.info("异常发生在"+this.getClass().getName()+"类的queryElementOperationForTree方法，异常原因是："+e.getMessage(), e.fillInStackTrace());
+		}
+		return sb.toString();
+	}
+	
+	/**
 	 * 获取资源对应的操作树
 	 * @param roleID 角色ID
 	 * @param resourceID 资源ID

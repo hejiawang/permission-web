@@ -123,10 +123,10 @@
 						<div class="col-xs-12">
 							<div class="col-xs-12">
 								<div id="elementbut" style="padding-bottom: 10px;">
-									<button id="goRaise" onclick="permission.org.goRaise();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >新增</button>
+									<!-- button id="goRaise" onclick="permission.org.goRaise();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >新增</button>
 									<button id="goModify" onclick="permission.org.goModify();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >修改</button>
 									<button id="goView" onclick="permission.org.goView();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >查看</button>
-									<button id="goErase" onclick="permission.org.goErase();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >删除</button>
+									<button id="goErase" onclick="permission.org.goErase();" class="btn btn-success btn-next" data-last="Finish" style="margin-left:5px;" >删除</button-->
 								</div>
 						    </div>	
 							<div class="col-xs-12" style="background-color: #F0F0F0; padding-top: 10px; padding-bottom: 10px;">

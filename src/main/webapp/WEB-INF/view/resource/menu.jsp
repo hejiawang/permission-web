@@ -1,84 +1,53 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<ul class="nav nav-list">
-
-    <li id="baseData" class="">
-        <a href="index">
+<ul class="nav nav-list" id="menu_ul_js">
+    <li id="xxx" class="">
+        <a href="/index">
             <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text" style="font-family: 微软雅黑">我的工作台</span>
+            <span class="menu-text" style="font-family: 微软雅黑">单一菜单</span>
         </a>
-	    <b class="arrow"></b>
+        <b class="arrow"></b>
     </li>
     
-    <li id="orgData" class="">
-        <a href="org">
-            <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text" style="font-family: 微软雅黑">机构管理</span>
+    <li id="baseYYY" class="">
+        <a href="javascript:void(0)" class="dropdown-toggle">
+            <i class="menu-icon fa fa-list"></i>
+            <span class="menu-text" style="font-family: 微软雅黑">集合菜单</span>
+            <b class="arrow fa fa-angle-down"></b>
         </a>
-	    <b class="arrow"></b>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li id="y1" class="">
+                <a href="/sss">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    <font style="font-family: 微软雅黑">菜单1</font>
+                </a>
+                <b class="arrow"></b>
+            </li>
+            <li id="y2" class="">
+                <a href="/ggg">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                  <font style="font-family: 微软雅黑">菜单2</font>
+                </a>
+                <b class="arrow"></b>
+            </li>
+        </ul>
     </li>
-    
-    <li id="postData" class="">
-        <a href="post">
-            <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text" style="font-family: 微软雅黑">岗位管理</span>
-        </a>
-	    <b class="arrow"></b>
-    </li>
-    
-    <li id="rankData" class="">
-        <a href="rank">
-            <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text" style="font-family: 微软雅黑">职级管理</span>
-        </a>
-	    <b class="arrow"></b>
-    </li>
-    
-    <li id="roleData" class="">
-        <a href="role">
-            <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text" style="font-family: 微软雅黑">角色管理</span>
-        </a>
-	    <b class="arrow"></b>
-    </li>
-    
-    <li id="appTypeData" class="">
-        <a href="appType">
-            <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text" style="font-family: 微软雅黑">系统类型</span>
-        </a>
-	    <b class="arrow"></b>
-    </li>
-    
-    <li id="appData" class="">
-        <a href="app">
-            <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text" style="font-family: 微软雅黑">应用系统</span>
-        </a>
-	    <b class="arrow"></b>
-    </li>
-    
-    <li id="menuData" class="">
-        <a href="menu">
-            <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text" style="font-family: 微软雅黑">菜单管理</span>
-        </a>
-	    <b class="arrow"></b>
-    </li>
-    
-    <li id="elementData" class="">
-        <a href="element">
-            <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text" style="font-family: 微软雅黑">页面元素</span>
-        </a>
-	    <b class="arrow"></b>
-    </li>
-    
-    <li id="userInfoData" class="">
-        <a href="userInfo">
-            <i class="menu-icon fa fa-tachometer"></i>
-            <span class="menu-text" style="font-family: 微软雅黑">用户管理</span>
-        </a>
-	    <b class="arrow"></b>
-    </li>
-    
 </ul><!-- /.nav-list -->
+
+<script type="text/javascript">
+	$(function(){
+		
+		//初始化头部app信息
+//		var appID_menu = UrlParm.parm("param_app_id");
+		var appID_menu = <%= session.getAttribute("defaultApp")%>;
+		$.ajax({
+			url : permission.domainUrl.baseDomain + "/permission/core/initMenu",
+			data : {"appID":appID_menu},
+			type: "get",
+			dataType : 'json',
+			success:function(result) {
+				$("#menu_ul_js").html(result.result);
+			}
+		});
+	});
+</script>
