@@ -82,7 +82,7 @@
 						<i class="ace-icon fa fa-home home-icon"></i>
 						<a href="index">我的工作台</a>
 					</li>
-					<li class="active">权限管理</li>
+					<li class="active">我的工作台</li>
 				</ul><!-- /.breadcrumb -->
 
 				<!-- search start -->

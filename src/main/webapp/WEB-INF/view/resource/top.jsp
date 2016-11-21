@@ -88,7 +88,8 @@
 			dataType : 'json',
 			success:function(result) {
 				if(result.success){
-					window.location.href = 	permission.domainUrl.baseDomain + "/pageGoto" + result.data.url;
+					//window.location.href = 	permission.domainUrl.baseDomain + "/pageGoto" + result.result.url;
+					window.location.href = 	permission.domainUrl.baseDomain + "/pageGoto/index";
 				}
 			}
 		});
