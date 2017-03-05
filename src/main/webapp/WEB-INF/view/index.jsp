@@ -11,6 +11,7 @@
 	<meta name="keywords" content="权限管理" />
   	<meta name="description" content="权限管理" />
 	<%@include file="resource/resource.jsp"%>
+	<link rel="stylesheet" href="<%= basePath1%>resources/css/areaPlug.css" />
 	<style type="text/css">
              .dataTables_length {
                   width: 160px !important;
@@ -93,7 +94,18 @@
 			<div class="page-content">
                 <div class="row">
 					<div class="col-xs-12">
-									  
+						<ul id="area-list">
+							<li id="summary-stock">
+								<div class="dt">配&nbsp;送&nbsp;至：</div>
+								<div class="dd">
+									<div id="area-selector">
+										<div class="text" style="width: 200px;"><div id="areaPlug_value" data-value="119143">辽宁省</div><b></b></div>                   
+										<div onclick="$('#area-selector').removeClass('hover')" class="close"></div>
+									</div><!--area-selector end-->
+									<div id="store-prompt"><strong></strong></div><!--store-prompt end--->
+								</div>
+							</li>
+						</ul>	  
 					</div>
 					<!-- PAGE CONTENT ENDS -->
 				</div><!-- /.col -->
@@ -106,6 +118,7 @@
 		</div><!-- /.page-content-area -->
 	</div>
 <!-- inline scripts related to this page -->
+<script src="<%= basePath%>resources/js/areaPlug.js"></script>
 <script type="text/javascript">
 jQuery.ajaxSetup({cache:false});
 </script>

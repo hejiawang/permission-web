@@ -23,6 +23,7 @@
 	</bean>
 
 	<import resource="classpath*:service-imp/service-config.xml" />
+	<import resource="classpath*:soLove-service-imp/service-config.xml" />
 	<import resource="classpath:config/datasources.xml" />
 	
 </beans>

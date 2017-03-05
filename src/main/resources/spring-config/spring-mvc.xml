@@ -64,15 +64,15 @@
 	</bean>
 
 	<bean id="domainUrlUtil" class="com.wang.core.util.DomainUrlUtil">
-		<property name="BASEURL_DOMAIN" value="${pom.baseurl.domain}" />
-		<property name="JS_BASEURL_DOMAIN" value="${pom.js.baseurl.domain}" />
-		<property name="CSS_BASEURL_DOMAIN" value="${pom.css.baseurl.domain}" />
-		<property name="IMG_BASEURL_DOMAIN" value="${pom.img.baseurl.domain}" /> 
-		<property name="COOKIE_DOMAIN" value="${pom.cookie.domain}" /> 
+		<property name="BASEURL_DOMAIN" value="http://localhost:8080" />
+		<property name="JS_BASEURL_DOMAIN" value="http://localhost:8080/resources/js" />
+		<property name="CSS_BASEURL_DOMAIN" value="http://localhost:8080/resources/css" />
+		<property name="IMG_BASEURL_DOMAIN" value="http://localhost:8080/resources/images" /> 
+		<property name="COOKIE_DOMAIN" value="permission.dev" /> 
 	</bean>
 	
 	<!-- 注入HornetQ连接参数 -->
-	<bean id="hornetqConfUtil" class="com.wang.core.util.hornetq.HornetqConfUtil">
+<!-- 	<bean id="hornetqConfUtil" class="com.wang.core.util.hornetq.HornetqConfUtil">
 		<property name="SEND_HOST" value="${pom.hornetq.send.host}" />
 		<property name="SEND_PORT" value="${pom.hornetq.send.port}" />
 		<property name="RECEIVE_HOST" value="${pom.hornetq.receive.host}" />
@@ -80,7 +80,7 @@
 		<property name="QUEUE" value="${pom.hornetq.queue}" />
 		<property name="FILE_PATH" value="${pom.hornetq.file.path}" />
 		<property name="FILE_NAME" value="${pom.hornetq.file.name}" />
-	</bean>
+	</bean> -->
 
 	<!-- Interceptor handlers -->
   	<mvc:interceptors>
